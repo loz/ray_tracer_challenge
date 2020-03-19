@@ -120,4 +120,13 @@ Spectator.describe RTuple do
 	expect(v2.normalize.magnitude).to eq(1.0)
     end
   end
+
+  describe "Dot Product" do 
+    let(a) { vector(1.0, 2.0, 3.0) }
+    let(b) { vector(2.0, 3.0, 4.0) }
+
+    it "sum components multiplied" do
+      expect(a.dot(b)).to eq(20.0)
+    end
+  end
 end
