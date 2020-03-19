@@ -1,0 +1,17 @@
+name: RayTracer
+version: 0.1.0
+
+authors:
+  - Jonathan Lozinski <jonathan.lozinski@gmail.com>
+
+targets:
+  RayTracer:
+    main: src/RayTracer.cr
+
+crystal: 0.33.0
+
+development_dependencies:
+  spectator:
+    gitlab: arctic-fox/spectator
+
+license: MIT
