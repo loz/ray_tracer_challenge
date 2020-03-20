@@ -3,6 +3,15 @@ def matrix(tuple)
   Matrix::Base.new(tuple)
 end
 
+def identity_matrix()
+  matrix( {
+   { 1.0, 0.0, 0.0, 0.0 },
+   { 0.0, 1.0, 0.0, 0.0 },
+   { 0.0, 0.0, 1.0, 0.0 },
+   { 0.0, 0.0, 0.0, 1.0 }
+  })
+end
+
 module Matrix
   class Base
     getter size : Int32
@@ -18,6 +27,18 @@ module Matrix
         @content << row
       end
       @size = size
+    end
+
+    def transpose
+      m = Array(Array(Float64)).new
+      size.times do |y|
+        row = Array(Float64).new
+        size.times do |x|
+          row << self[x,y]
+        end
+        m << row
+      end
+      matrix(m)
     end
 
     def [](x, y)
