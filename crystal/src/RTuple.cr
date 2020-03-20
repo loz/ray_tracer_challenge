@@ -1,3 +1,7 @@
+def tuple(x, y, z, w)
+  RTuple.new(x, y, z, w)
+end
+
 def point(x, y, z)
   RTuple.new(x, y, z, 1.0)
 end
