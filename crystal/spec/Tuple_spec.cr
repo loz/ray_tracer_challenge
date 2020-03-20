@@ -129,4 +129,14 @@ Spectator.describe RTuple do
       expect(a.dot(b)).to eq(20.0)
     end
   end
+
+  describe "Cross Product" do
+    let(a) { vector(1.0, 2.0, 3.0) }
+    let(b) { vector(2.0, 3.0, 4.0) }
+
+    it "sum computes cross product" do
+      expect(a.cross(b)).to eq(vector(-1.0, 2.0, -1.0))
+      expect(b.cross(a)).to eq(vector(1.0, -2.0,  1.0))
+    end
+  end
 end
