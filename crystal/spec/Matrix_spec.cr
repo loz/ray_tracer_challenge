@@ -170,6 +170,41 @@ Spectator.describe Matrix do
     end
   end
 
+  describe "Calculating determinant of 3x3" do
+    let(a) do
+      matrix({ 
+        { 1.0, 2.0, 6.0},
+        {-5.0, 8.0,-4.0},
+        { 2.0, 6.0, 4.0}
+      })
+    end
+
+    it "uses cofactors" do
+      expect(a.cofactor(0,0)).to eq 56.0
+      expect(a.cofactor(0,1)).to eq 12.0
+      expect(a.cofactor(0,2)).to eq -46.0
+      expect(a.determinant).to eq -196.0
+    end
+  end
+
+  describe "Calculating determinant of 4x4" do
+    let(a) do
+      matrix({ 
+        {-2.0,-8.0, 3.0, 5.0},
+        {-3.0, 1.0, 7.0, 3.0},
+        { 1.0, 2.0,-9.0, 6.0},
+        {-6.0, 7.0, 7.0,-9.0}
+      })
+    end
+
+    it "uses cofactors" do
+      expect(a.cofactor(0,0)).to eq 690
+      expect(a.cofactor(0,1)).to eq 447
+      expect(a.cofactor(0,2)).to eq 210
+      expect(a.cofactor(0,3)).to eq 51
+      expect(a.determinant).to eq -4071
+    end
+  end
 
   describe "Submatrices" do
     describe "3x3" do
@@ -205,6 +240,43 @@ Spectator.describe Matrix do
           {-8.0, 8.0, 6.0},
           {-7.0,-1.0, 1.0}
         })
+      end
+    end
+  end
+
+  describe "Minors" do
+    describe "of 3x3" do
+      let(a) do
+        matrix({
+          {3.0, 5.0, 0.0},
+          {2.0,-1.0,-7.0},
+          {6.0,-1.0, 5.0}
+        })
+      end
+      let(b) { a.submatrix(1,0) }
+
+      it "has minor of determinant of submatrix" do
+        expect(a.minor(1,0)).to eq b.determinant
+      end
+    end
+  end
+
+  describe "Cofactors" do
+    describe "of 3x3" do
+      let(a) do
+        matrix({
+          {3.0, 5.0, 0.0},
+          {2.0,-1.0,-7.0},
+          {6.0,-1.0, 5.0}
+        })
+      end
+      let(b) { a.submatrix(1,0) }
+
+      it "computes cofactors" do
+        expect(a.minor(0,0)).to eq -12.0
+        expect(a.cofactor(0,0)).to eq -12.0
+        expect(a.minor(1,0)).to eq 25.0
+        expect(a.cofactor(1,0)).to eq -25.0
       end
     end
   end

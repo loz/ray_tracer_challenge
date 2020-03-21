@@ -30,8 +30,27 @@ module Matrix
     end
 
     def determinant
-      (self[0,0] * self[1,1]) - 
-      (self[1,0] * self[0,1])
+      if size == 2
+        return (self[0,0] * self[1,1]) - 
+               (self[1,0] * self[0,1])
+      end
+      total = 0.0
+      size.times do |x|
+        total += (self[0,x] * cofactor(0,x))
+      end
+      total
+    end
+
+    def minor(row, col)
+      submatrix(row,col).determinant
+    end
+
+    def cofactor(row, col)
+      if (row+col).odd?
+        0 - minor(row, col)
+      else
+        minor(row, col)
+      end
     end
 
     def submatrix(remrow, remcol)
