@@ -156,4 +156,56 @@ Spectator.describe Matrix do
       expect(identity_matrix.transpose).to eq identity_matrix
     end
   end
+
+  describe "Calculating determinant of 2x2" do
+    let(a) do
+      matrix({
+        { 1.0, 5.0},
+        {-3.0, 2.0}
+      })
+    end
+
+    it "is ad - bc" do
+      expect(a.determinant).to eq 17
+    end
+  end
+
+
+  describe "Submatrices" do
+    describe "3x3" do
+      let(a) do
+        matrix({
+          { 1.0,  5.0,  0.0},
+          {-3.0,  2.0,  7.0},
+          { 0.0,  6.0, -3.0}
+        })
+      end
+
+      it "has a 2x2 submatrix, removing stated row and col" do
+        expect(a.submatrix(0,2)).to eq matrix({
+          {-3.0, 2.0},
+          { 0.0, 6.0}
+        })
+      end
+    end
+
+    describe "4x4" do
+      let(a) do
+        matrix({
+          {-6.0, 1.0, 1.0, 6.0},
+          {-8.0, 5.0, 8.0, 6.0},
+          {-1.0, 0.0, 8.0, 2.0},
+          {-7.0, 0.0,-1.0, 1.0}
+        })
+      end
+
+      it "has a 3x3 submatrix, removing stated row and col" do
+        expect(a.submatrix(2,1)).to eq matrix({
+          {-6.0, 1.0, 6.0},
+          {-8.0, 8.0, 6.0},
+          {-7.0,-1.0, 1.0}
+        })
+      end
+    end
+  end
 end

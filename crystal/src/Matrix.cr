@@ -29,6 +29,25 @@ module Matrix
       @size = size
     end
 
+    def determinant
+      (self[0,0] * self[1,1]) - 
+      (self[1,0] * self[0,1])
+    end
+
+    def submatrix(remrow, remcol)
+      m = Array(Array(Float64)).new
+      size.times do |y|
+        next if y == remrow
+        row = Array(Float64).new
+        size.times do |x|
+          next if x == remcol
+          row << self[y,x]
+        end
+        m << row
+      end
+      matrix(m)
+    end
+
     def transpose
       m = Array(Array(Float64)).new
       size.times do |y|
