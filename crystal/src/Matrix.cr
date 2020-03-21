@@ -96,6 +96,19 @@ module Matrix
       matrix(m)
     end
 
+    def dump
+      print "\n"
+      size.times do |y|
+        print "[ "
+        size.times do |x|
+          print self[y,x]
+          print " "
+        end
+        print "]\n"
+      end
+      print "\n"
+    end
+
     def [](x, y)
       @content[y][x]
     end
@@ -133,6 +146,18 @@ module Matrix
                self[y,3] * other.w
       end
       RTuple.new(col[0], col[1], col[2], col[3])
+    end
+
+    def +(other)
+      result = Array(Array(Float64)).new
+      size.times do |y|
+        col = Array(Float64).new
+        size.times do |x|
+          col << (other[y,x] + self[y, x])
+        end
+        result << col
+      end
+      matrix(result)
     end
 
     def *(other)
