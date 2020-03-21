@@ -29,6 +29,23 @@ module Matrix
       @size = size
     end
 
+    def invertible?
+      determinant != 0.0
+    end
+
+    def inverse
+      m = Array(Array(Float64)).new
+      d = determinant
+      size.times do |y|
+        row = Array(Float64).new
+        size.times do |x|
+          row << (cofactor(x,y) / d)
+        end
+        m << row
+      end
+      matrix(m)
+    end
+
     def determinant
       if size == 2
         return (self[0,0] * self[1,1]) - 
@@ -88,6 +105,20 @@ module Matrix
       size.times do |y|
         size.times do |x|
           return false if self[x,y] != other[x,y]
+        end
+      end
+      return true
+    end
+
+    EPSILON = 0.00001
+    def approx(other)
+      return false unless size == other.size
+      size.times do |y|
+        size.times do |x|
+         if (self[x,y] < (other[x,y] - EPSILON)) ||
+            (self[x,y] > (other[x,y] + EPSILON))
+           return false
+         end
         end
       end
       return true

@@ -280,4 +280,125 @@ Spectator.describe Matrix do
       end
     end
   end
+
+  describe "Inverting" do
+    describe "a non zero determinant" do
+      let(a) do
+        matrix({
+          {6.0, 4.0, 4.0, 4.0},
+          {5.0, 5.0, 7.0, 6.0},
+          {4.0,-9.0, 3.0,-7.0},
+          {9.0, 1.0, 7.0,-6.0}
+        })
+      end
+
+      it "is invertable" do
+        expect(a.determinant).to eq -2120.0
+        expect(a.invertible?).to eq true
+      end
+    end
+
+    describe "a zero determinant" do
+      let(a) do
+        matrix({
+          {-4.0, 2.0,-2.0,-3.0},
+          { 9.0, 6.0, 2.0, 6.0},
+          { 0.0,-5.0, 1.0,-5.0},
+          { 0.0, 0.0, 0.0, 0.0}
+        })
+      end
+
+      it "is invertable" do
+        expect(a.determinant).to eq 0.0
+        expect(a.invertible?).to eq false
+      end
+    end
+
+    describe "caclulating inverse of 4x4" do
+      let(a) do
+        matrix({
+          {-5.0, 2.0, 6.0,-8.0},
+          { 1.0,-5.0, 1.0, 8.0},
+          { 7.0, 7.0,-6.0,-7.0},
+          { 1.0,-3.0, 7.0, 4.0}
+        })
+      end
+      let(b) { a.inverse }
+
+      it "uses rations of cofactors and determinant" do
+        expect(a.determinant).to eq 532.0
+        expect(a.cofactor(2,3)).to eq -160.0
+        expect(b[3,2]).to eq -160.0/532.0
+
+        expect(a.cofactor(3,2)).to eq 105.0
+        expect(b[2,3]).to eq 105.0/532.0
+
+        expect(b.approx(matrix({
+          { 0.21805, 0.45113, 0.24060,-0.04511},
+          {-0.80827,-1.45677,-0.44361, 0.52068},
+          {-0.07895,-0.22368,-0.05263, 0.19737},
+          {-0.52256,-0.81391,-0.30075, 0.30639}
+        }))).to be true
+      end
+
+      it "works for another example" do
+        a = matrix({
+          { 8.0,-5.0, 9.0, 2.0},
+          { 7.0, 5.0, 6.0, 1.0},
+          {-6.0, 0.0, 9.0, 6.0},
+          {-3.0, 0.0,-9.0,-4.0}
+        })
+
+        expect(a.inverse.approx(matrix({
+         {-0.15385 ,-0.15385 ,-0.28205 ,-0.53846 },
+         {-0.07692 , 0.12308 , 0.02564 , 0.03077 },
+         { 0.35897 , 0.35897 , 0.43590 , 0.92308 },
+         {-0.69231 ,-0.69231 ,-0.76923 ,-1.92308 }
+        }))).to be true
+      end
+
+      it "works for yet another example" do
+        a = matrix({
+          { 9.0, 3.0, 0.0, 9.0},
+          {-5.0,-2.0,-6.0,-3.0},
+          {-4.0, 9.0, 6.0, 4.0},
+          {-7.0, 6.0, 6.0, 2.0}
+        })
+
+        expect(a.inverse.approx(matrix({
+          {-0.04074 ,-0.07778 , 0.14444 ,-0.22222 },
+          {-0.07778 , 0.03333 , 0.36667 ,-0.33333 },
+          {-0.02901 ,-0.14630 ,-0.10926 , 0.12963 },
+          { 0.17778 , 0.06667 ,-0.26667 , 0.33333 }
+        }))).to be true
+
+      end
+    end
+
+    describe "Multiplying by inverse" do
+      let(a) do
+        matrix({
+          { 3.0,-9.0, 7.0, 3.0},
+          { 3.0,-8.0, 2.0,-9.0},
+          {-4.0, 4.0, 4.0, 1.0},
+          {-6.0, 5.0,-1.0, 1.0}
+        })
+      end
+
+      let(b) do
+        matrix({
+          { 8.0, 2.0, 2.0, 2.0},
+          { 3.0,-1.0, 7.0, 0.0},
+          { 7.0, 0.0, 5.0, 4.0},
+          { 6.0,-2.0, 0.0, 5.0}
+        })
+      end
+
+
+      it "a*b * inverse(b) -> a" do
+        c = a * b
+        expect((c * b.inverse).approx(a)).to eq true
+      end
+    end
+  end
 end
