@@ -67,7 +67,7 @@ class RTuple
     )
   end
 
-  def *(other : Float32)
+  def *(other : Float64)
     RTuple.new(
     	x * other,
 	y * other,
