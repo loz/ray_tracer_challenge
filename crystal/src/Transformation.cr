@@ -52,5 +52,29 @@ def rotation_x(r)
   })
 end
 
-module Transformation
+class Matrix::Base
+  def rotate_x(r)
+    rotation_x(r) * self
+  end
+
+  def rotate_y(r)
+    rotation_y(r) * self
+  end
+
+  def rotate_z(r)
+    rotation_z(r) * self
+  end
+
+  def scale(x, y, z)
+    scaling(x, y, z) * self
+  end
+
+  def translate(x, y, z)
+    translation(x, y, z) * self
+  end
 end
+
+module Transformation
+
+end
+

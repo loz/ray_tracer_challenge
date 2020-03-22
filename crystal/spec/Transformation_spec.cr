@@ -169,4 +169,38 @@ Spectator.describe Transformation do
       end
     end
   end
+
+  describe "Combining transformations" do
+    let(p) { point(1.0, 0.0, 1.0) }
+    let(a) { rotation_x(Math::PI / 2.0) }
+    let(b) { scaling(5.0, 5.0, 5.0) }
+    let(c) { translation(10.0, 5.0, 7.0) }
+
+    it "can be in sequence" do
+      p2 = a * p
+      expect(p2.aproximate?(point( 1.0,-1.0, 0.0))).to eq true
+
+      p3 = b * p2
+      expect(p3.aproximate?(point(5.0, -5.0, 0.0))).to eq true
+
+      p4 = c * p3
+      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+    end
+
+    it "can be chained - in reverse order" do
+      t = c * b * a
+      p4 = t * p
+      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+    end
+
+    it "can be expressed in method chains" do
+      t = identity_matrix.
+          rotate_x(Math::PI / 2.0).
+          scale(5.0, 5.0, 5.0).
+          translate(10.0, 5.0, 7.0)
+
+      p4 = t * p
+      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+    end
+  end
 end
