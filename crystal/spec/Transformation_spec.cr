@@ -69,4 +69,52 @@ Spectator.describe Transformation do
       end
     end
   end
+
+  describe "Rotation" do
+    describe "around x axis" do
+      let(p) { point(0.0, 1.0, 0.0) }
+      let(half_quarter) { rotation_x(Math::PI / 4.0) }
+      let(full_quarter) { rotation_x(Math::PI / 2.0) }
+
+      it "rotates accordingly" do
+        expect((half_quarter * p).aproximate?(point(0.0, Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0))).to eq true
+
+        expect((full_quarter * p).aproximate?(point(0.0, 0.0, 1.0))).to eq true
+      end
+    end
+
+    describe "inverse of x axis" do
+      let(p) { point(0.0, 1.0, 0.0) }
+      let(half_quarter) { rotation_x(Math::PI / 4.0) }
+      let(inv) { half_quarter.inverse }
+
+      it "rotates in opposite direction" do
+        expect((inv * p).aproximate?(point(0.0, Math.sqrt(2.0)/2.0, 0.0 - Math.sqrt(2.0)/2.0))).to eq true
+      end
+    end
+
+    describe "around y axis" do
+      let(p) { point(0.0, 0.0, 1.0) }
+      let(half_quarter) { rotation_y(Math::PI / 4.0) }
+      let(full_quarter) { rotation_y(Math::PI / 2.0) }
+
+      it "rotates accordingly" do
+        expect((half_quarter * p).aproximate?(point(Math.sqrt(2.0)/2.0, 0.0, Math.sqrt(2.0)/2.0))).to eq true
+
+        expect((full_quarter * p).aproximate?(point(1.0, 0.0, 0.0))).to eq true
+      end
+    end
+
+    describe "around z axis" do
+      let(p) { point(0.0, 1.0, 0.0) }
+      let(half_quarter) { rotation_z(Math::PI / 4.0) }
+      let(full_quarter) { rotation_z(Math::PI / 2.0) }
+
+      it "rotates accordingly" do
+        expect((half_quarter * p).aproximate?(point(0.0 - Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0, 0.0))).to eq true
+
+        expect((full_quarter * p).aproximate?(point(-1.0, 0.0, 0.0))).to eq true
+      end
+    end
+  end
 end
