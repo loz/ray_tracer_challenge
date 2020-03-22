@@ -117,4 +117,56 @@ Spectator.describe Transformation do
       end
     end
   end
+
+  describe "Shearing" do
+    let(p) { point(2.0, 3.0, 4.0) }
+
+    describe "x in proportion to y" do
+      let(t) { shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) }
+      
+      it "add 1y to x" do
+        expect((t * p).aproximate?(point(5.0, 3.0, 4.0))).to eq true
+      end
+    end
+
+    describe "x in proportion to z" do
+      let(t) { shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0) }
+      
+      it "add 1z to x" do
+        expect((t * p).aproximate?(point(6.0, 3.0, 4.0))).to eq true
+      end
+    end
+
+    describe "y in proportion to x" do
+      let(t) { shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0) }
+      
+      it "add 1x to y" do
+        expect((t * p).aproximate?(point(2.0, 5.0, 4.0))).to eq true
+      end
+    end
+
+    describe "y in proportion to z" do
+      let(t) { shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0) }
+      
+      it "add 1z to y" do
+        expect((t * p).aproximate?(point(2.0, 7.0, 4.0))).to eq true
+      end
+    end
+
+    describe "z in proportion to x" do
+      let(t) { shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0) }
+      
+      it "add 1x to z" do
+        expect((t * p).aproximate?(point(2.0, 3.0, 6.0))).to eq true
+      end
+    end
+
+    describe "z in proportion to y" do
+      let(t) { shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0) }
+      
+      it "add 1y to z" do
+        expect((t * p).aproximate?(point(2.0, 3.0, 7.0))).to eq true
+      end
+    end
+  end
 end

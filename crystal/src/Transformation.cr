@@ -16,6 +16,15 @@ def scaling(x, y, z)
   })
 end
 
+def shearing(xy, xz, yx, yz, zx, zy)
+  matrix({
+    {1.0,  xy,  xz, 0.0},
+    { yx, 1.0,  yz, 0.0},
+    { zx,  zy, 1.0, 0.0},
+    {0.0, 0.0, 0.0, 1.0},
+  })
+end
+
 def rotation_z(r)
   matrix({
     {Math.cos(r), 0.0 - Math.sin(r), 0.0, 0.0},
