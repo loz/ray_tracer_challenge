@@ -12,7 +12,8 @@ class Sphere
   def intersect(ray)
     tray = ray.transform(transform.inverse)
 
-    result = [] of Intersection
+    result = Intersections.new
+
     s = tray.origin - point(0.0, 0.0, 0.0)
 
     a = tray.direction.dot(tray.direction)
