@@ -9,8 +9,8 @@ Spectator.describe Sphere do
       xs = s.intersect(r)
       expect(xs.size).to eq 2
 
-      expect(xs[0]).to eq 4.0
-      expect(xs[1]).to eq 6.0
+      expect(xs[0].t).to eq 4.0
+      expect(xs[1].t).to eq 6.0
     end
   end
 
@@ -22,8 +22,8 @@ Spectator.describe Sphere do
       xs = s.intersect(r)
       expect(xs.size).to eq 2
 
-      expect(xs[0]).to eq 5.0
-      expect(xs[1]).to eq 5.0
+      expect(xs[0].t).to eq 5.0
+      expect(xs[1].t).to eq 5.0
     end
   end
 
@@ -45,8 +45,8 @@ Spectator.describe Sphere do
       xs = s.intersect(r)
       expect(xs.size).to eq 2
 
-      expect(xs[0]).to eq -1.0
-      expect(xs[1]).to eq  1.0
+      expect(xs[0].t).to eq -1.0
+      expect(xs[1].t).to eq  1.0
     end
   end
 
@@ -58,8 +58,24 @@ Spectator.describe Sphere do
       xs = s.intersect(r)
       expect(xs.size).to eq 2
 
-      expect(xs[0]).to eq -6.0
-      expect(xs[1]).to eq -4.0
+      expect(xs[0].t).to eq -6.0
+      expect(xs[1].t).to eq -4.0
+    end
+  end
+
+  describe "Ray intersects are Intersect objects, including t and object hit" do
+    let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+    let(s) { sphere() }
+
+    it "does so at two time points" do
+      xs = s.intersect(r)
+      expect(xs.size).to eq 2
+
+      expect(xs[0].t).to eq 4.0
+      expect(xs[1].t).to eq 6.0
+      expect(xs[0].object).to eq s
+      expect(xs[1].object).to eq s
+
     end
   end
 end

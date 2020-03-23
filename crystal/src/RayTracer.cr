@@ -3,6 +3,7 @@ require "./Canvas"
 require "./Matrix"
 require "./Transformation"
 require "./Rays"
+require "./Intersection"
 require "./Sphere"
 
 module RayTracer

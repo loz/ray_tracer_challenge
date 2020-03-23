@@ -4,7 +4,7 @@ end
 
 class Sphere
   def intersect(ray)
-    result = [] of Float64
+    result = [] of Intersection
     s = ray.origin - point(0.0, 0.0, 0.0)
 
     a = ray.direction.dot(ray.direction)
@@ -20,10 +20,10 @@ class Sphere
     t1 = (0.0 - b - Math.sqrt(discriminant)) / (2 * a)
     t2 = (0.0 - b + Math.sqrt(discriminant)) / (2 * a)
 
-    result << t1
-    result << t2
-
-    result
+    intersections(
+    	intersection(t1, self),
+	intersection(t2, self)
+	)
   end
 
 
