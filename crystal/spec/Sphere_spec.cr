@@ -78,4 +78,45 @@ Spectator.describe Sphere do
 
     end
   end
+
+  describe "Transform" do
+    describe "The default" do
+      let(s) { sphere() }
+      
+      it "is the identity matrix" do
+        expect(s.transform).to eq identity_matrix
+      end
+    end
+
+    describe "Changing" do
+      let(s) { sphere() }
+      let(t) { translation(2.0, 3.0, 4.0) }
+
+      it "sets to given transform" do
+        s.transform = t
+        expect(s.transform).to eq t
+      end
+    end
+
+    describe "Intersecting with" do
+      let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+      let(s) { sphere() }
+
+      it "accounts for a scaling transform" do
+        s.transform = scaling(2.0, 2.0, 2.0)
+        xs = s.intersect(r)
+
+        expect(xs.size).to eq 2
+        expect(xs[0].t).to eq 3.0
+        expect(xs[1].t).to eq 7.0
+      end
+
+      it "accounts for a translation transform" do
+        s.transform = translation(5.0, 0.0, 0.0)
+        xs = s.intersect(r)
+
+        expect(xs.size).to eq 0
+      end
+    end
+  end
 end

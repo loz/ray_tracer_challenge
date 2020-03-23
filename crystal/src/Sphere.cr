@@ -3,12 +3,20 @@ def sphere()
 end
 
 class Sphere
-  def intersect(ray)
-    result = [] of Intersection
-    s = ray.origin - point(0.0, 0.0, 0.0)
+  property transform : Matrix::Base
 
-    a = ray.direction.dot(ray.direction)
-    b = 2.0 * ray.direction.dot(s)
+  def initialize()
+    @transform = identity_matrix
+  end
+
+  def intersect(ray)
+    tray = ray.transform(transform.inverse)
+
+    result = [] of Intersection
+    s = tray.origin - point(0.0, 0.0, 0.0)
+
+    a = tray.direction.dot(tray.direction)
+    b = 2.0 * tray.direction.dot(s)
     c = s.dot(s) - 1.0
 
     discriminant = (b*b) - (4.0 * a * c)
@@ -25,6 +33,5 @@ class Sphere
 	intersection(t2, self)
 	)
   end
-
 
 end

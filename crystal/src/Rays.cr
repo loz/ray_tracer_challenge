@@ -11,4 +11,8 @@ class Rays
   def position(t)
     origin + (direction * t)
   end
+
+  def transform(m)
+    ray(m * origin, m * direction)
+  end
 end
