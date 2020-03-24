@@ -49,8 +49,8 @@ class RTuple
     w >= (v.w - EPSILON) && w <= (v.w + EPSILON)
   end
 
-  def +(other)
-    RTuple.new(
+  def +(other : RTuple)
+    self.class.new(
     	x + other.x,
 	y + other.y,
 	z + other.z,
@@ -68,6 +68,15 @@ class RTuple
 	y - other.y,
 	z - other.z,
 	w - other.w
+    )
+  end
+
+  def *(other)
+    RTuple.new(
+    	x * other.x,
+	y * other.y,
+	z * other.z,
+	w * other.w
     )
   end
 

@@ -4,9 +4,11 @@ end
 
 class Sphere
   property transform : Matrix::Base
+  property material : Materials::Base
 
   def initialize()
     @transform = identity_matrix
+    @material = Materials.material()
   end
 
   def intersect(ray)

@@ -178,4 +178,20 @@ Spectator.describe Sphere do
       end
     end
   end
+
+  describe "Sphere materials" do
+    let(s) { sphere() }
+
+    it "has default material" do
+      expect(s.material).to eq material()
+    end
+
+    it "can be assign material" do
+      m = material()
+      m.ambient = 1.0
+
+      s.material = m
+      expect(s.material).to eq m
+    end
+  end
 end

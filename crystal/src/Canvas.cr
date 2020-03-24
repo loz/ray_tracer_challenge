@@ -2,6 +2,13 @@ def color(r, g, b)
   Canvas::Color.new(r, g, b, 1.0)
 end
 
+def color(t : RTuple)
+  color(t.x, t.y, t.z)
+end
+
+def black()
+  color(0.0, 0.0, 0.0)
+end
 
 class Canvas
   getter width, height
