@@ -77,9 +77,9 @@ Spectator.describe Transformation do
       let(full_quarter) { rotation_x(Math::PI / 2.0) }
 
       it "rotates accordingly" do
-        expect((half_quarter * p).aproximate?(point(0.0, Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0))).to eq true
+        expect((half_quarter * p).approximate?(point(0.0, Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0))).to eq true
 
-        expect((full_quarter * p).aproximate?(point(0.0, 0.0, 1.0))).to eq true
+        expect((full_quarter * p).approximate?(point(0.0, 0.0, 1.0))).to eq true
       end
     end
 
@@ -89,7 +89,7 @@ Spectator.describe Transformation do
       let(inv) { half_quarter.inverse }
 
       it "rotates in opposite direction" do
-        expect((inv * p).aproximate?(point(0.0, Math.sqrt(2.0)/2.0, 0.0 - Math.sqrt(2.0)/2.0))).to eq true
+        expect((inv * p).approximate?(point(0.0, Math.sqrt(2.0)/2.0, 0.0 - Math.sqrt(2.0)/2.0))).to eq true
       end
     end
 
@@ -99,9 +99,9 @@ Spectator.describe Transformation do
       let(full_quarter) { rotation_y(Math::PI / 2.0) }
 
       it "rotates accordingly" do
-        expect((half_quarter * p).aproximate?(point(Math.sqrt(2.0)/2.0, 0.0, Math.sqrt(2.0)/2.0))).to eq true
+        expect((half_quarter * p).approximate?(point(Math.sqrt(2.0)/2.0, 0.0, Math.sqrt(2.0)/2.0))).to eq true
 
-        expect((full_quarter * p).aproximate?(point(1.0, 0.0, 0.0))).to eq true
+        expect((full_quarter * p).approximate?(point(1.0, 0.0, 0.0))).to eq true
       end
     end
 
@@ -111,9 +111,9 @@ Spectator.describe Transformation do
       let(full_quarter) { rotation_z(Math::PI / 2.0) }
 
       it "rotates accordingly" do
-        expect((half_quarter * p).aproximate?(point(0.0 - Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0, 0.0))).to eq true
+        expect((half_quarter * p).approximate?(point(0.0 - Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0, 0.0))).to eq true
 
-        expect((full_quarter * p).aproximate?(point(-1.0, 0.0, 0.0))).to eq true
+        expect((full_quarter * p).approximate?(point(-1.0, 0.0, 0.0))).to eq true
       end
     end
   end
@@ -125,7 +125,7 @@ Spectator.describe Transformation do
       let(t) { shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) }
       
       it "add 1y to x" do
-        expect((t * p).aproximate?(point(5.0, 3.0, 4.0))).to eq true
+        expect((t * p).approximate?(point(5.0, 3.0, 4.0))).to eq true
       end
     end
 
@@ -133,7 +133,7 @@ Spectator.describe Transformation do
       let(t) { shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0) }
       
       it "add 1z to x" do
-        expect((t * p).aproximate?(point(6.0, 3.0, 4.0))).to eq true
+        expect((t * p).approximate?(point(6.0, 3.0, 4.0))).to eq true
       end
     end
 
@@ -141,7 +141,7 @@ Spectator.describe Transformation do
       let(t) { shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0) }
       
       it "add 1x to y" do
-        expect((t * p).aproximate?(point(2.0, 5.0, 4.0))).to eq true
+        expect((t * p).approximate?(point(2.0, 5.0, 4.0))).to eq true
       end
     end
 
@@ -149,7 +149,7 @@ Spectator.describe Transformation do
       let(t) { shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0) }
       
       it "add 1z to y" do
-        expect((t * p).aproximate?(point(2.0, 7.0, 4.0))).to eq true
+        expect((t * p).approximate?(point(2.0, 7.0, 4.0))).to eq true
       end
     end
 
@@ -157,7 +157,7 @@ Spectator.describe Transformation do
       let(t) { shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0) }
       
       it "add 1x to z" do
-        expect((t * p).aproximate?(point(2.0, 3.0, 6.0))).to eq true
+        expect((t * p).approximate?(point(2.0, 3.0, 6.0))).to eq true
       end
     end
 
@@ -165,7 +165,7 @@ Spectator.describe Transformation do
       let(t) { shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0) }
       
       it "add 1y to z" do
-        expect((t * p).aproximate?(point(2.0, 3.0, 7.0))).to eq true
+        expect((t * p).approximate?(point(2.0, 3.0, 7.0))).to eq true
       end
     end
   end
@@ -178,19 +178,19 @@ Spectator.describe Transformation do
 
     it "can be in sequence" do
       p2 = a * p
-      expect(p2.aproximate?(point( 1.0,-1.0, 0.0))).to eq true
+      expect(p2.approximate?(point( 1.0,-1.0, 0.0))).to eq true
 
       p3 = b * p2
-      expect(p3.aproximate?(point(5.0, -5.0, 0.0))).to eq true
+      expect(p3.approximate?(point(5.0, -5.0, 0.0))).to eq true
 
       p4 = c * p3
-      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+      expect(p4.approximate?(point(15.0, 0.0, 7.0))).to eq true
     end
 
     it "can be chained - in reverse order" do
       t = c * b * a
       p4 = t * p
-      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+      expect(p4.approximate?(point(15.0, 0.0, 7.0))).to eq true
     end
 
     it "can be expressed in method chains" do
@@ -200,7 +200,7 @@ Spectator.describe Transformation do
           translate(10.0, 5.0, 7.0)
 
       p4 = t * p
-      expect(p4.aproximate?(point(15.0, 0.0, 7.0))).to eq true
+      expect(p4.approximate?(point(15.0, 0.0, 7.0))).to eq true
     end
   end
 end

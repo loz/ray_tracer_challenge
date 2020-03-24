@@ -119,4 +119,63 @@ Spectator.describe Sphere do
       end
     end
   end
+
+  describe "Normals" do
+    describe "at a point on x axis" do
+      let(s) { sphere() }
+      
+      it "is a vector at right angles to tangent" do
+        expect(s.normal_at(point(1.0, 0.0, 0.0))).to eq vector(1.0, 0.0, 0.0)
+      end
+
+    end
+
+    describe "at a point on y axis" do
+      let(s) { sphere() }
+      
+      it "is a vector at right angles to tangent" do
+        expect(s.normal_at(point(0.0, 1.0, 0.0))).to eq vector(0.0, 1.0, 0.0)
+      end
+
+    end
+
+    describe "at a point on z axis" do
+      let(s) { sphere() }
+      
+      it "is a vector at right angles to tangent" do
+        expect(s.normal_at(point(0.0, 0.0, 1.0))).to eq vector(0.0, 0.0, 1.0)
+      end
+
+    end
+
+    describe "at a point on non-axial point" do
+      let(s) { sphere() }
+      
+      it "is a vector at right angles to tangent of point" do
+        n = s.normal_at(point(Math.sqrt(3.0)/3.0,Math.sqrt(3.0)/3.0,Math.sqrt(3.0)/3.0))
+	expect(n).to eq vector(Math.sqrt(3.0)/3.0,Math.sqrt(3.0)/3.0,Math.sqrt(3.0)/3.0)
+      end
+
+    end
+
+    describe "for a transformed sphere" do
+      let(s) { sphere() }
+
+      it "computes translated normals" do
+        t = translation(0.0, 1.0, 0.0)
+        s.transform = t
+        n = s.normal_at(point(0.0, 1.70711, -0.70711))
+
+	expect(n.approximate?(vector(0.0, 0.70711, -0.70711))).to be true
+      end
+
+      it "computes scaled and rotated normals" do
+        t = scaling(1.0, 0.5, 1.0) * rotation_z(Math::PI / 5.0)
+        s.transform = t
+        n = s.normal_at(point(0.0, Math.sqrt(2.0)/2.0, 0.0 - Math.sqrt(2.0)/2.0))
+
+	expect(n.approximate?(vector(0.0, 0.97014, -0.24254))).to be true
+      end
+    end
+  end
 end

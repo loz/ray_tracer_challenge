@@ -112,7 +112,7 @@ Spectator.describe RTuple do
 
     it "shrinks all components by the magnitude" do
     	expect(v1.normalize).to eq(vector(1.0, 0.0, 0.0))
-	expect(v2.normalize.aproximate?(vector(0.26726, 0.53452, 0.80178))).to be_true
+	expect(v2.normalize.approximate?(vector(0.26726, 0.53452, 0.80178))).to be_true
     end
 
     it "results in a vector with magnitude of 1" do
@@ -137,6 +137,29 @@ Spectator.describe RTuple do
     it "sum computes cross product" do
       expect(a.cross(b)).to eq(vector(-1.0, 2.0, -1.0))
       expect(b.cross(a)).to eq(vector(1.0, -2.0,  1.0))
+    end
+  end
+
+  describe "Reflecting a vector" do
+    describe "approaching at 45degree" do
+      let(v) { vector( 1.0,-1.0, 0.0) }
+      let(n) { vector( 0.0, 1.0, 0.0) }
+      let(r) { v.reflect(n) }
+
+      it "reflects at 45 degrees in other direction" do
+        expect(r).to eq vector(1.0, 1.0, 0.0)
+      end
+    end
+
+    describe "off a slanted surface" do
+      let(v) { vector( 0.0,-1.0, 0.0) }
+      let(n) { vector(Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0, 0.0) }
+      let(r) { v.reflect(n) }
+
+      it "reflects at degrees from normal in other direction" do
+        expect(r.approximate?(vector(1.0, 0.0, 0.0))).to eq true
+      end
+
     end
   end
 end

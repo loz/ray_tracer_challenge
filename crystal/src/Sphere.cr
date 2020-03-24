@@ -35,4 +35,13 @@ class Sphere
 	)
   end
 
+  def normal_at(p)
+    object_point = transform.inverse * p
+    object_normal = object_point - point(0.0, 0.0, 0.0)
+
+    world_normal = transform.inverse.transpose * object_normal
+    world_normal.fix_vector_w!
+    return world_normal.normalize
+  end
+
 end

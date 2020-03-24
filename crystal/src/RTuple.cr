@@ -23,6 +23,10 @@ class RTuple
     @w == 0.0
   end
 
+  def fix_vector_w!
+    @w = 0.0
+  end
+
   def magnitude
     Math.sqrt((x*x) + (y*y) + (z*z))
   end
@@ -38,7 +42,7 @@ class RTuple
   end
 
   EPSILON = 0.00001
-  def aproximate?(v : RTuple) 
+  def approximate?(v : RTuple) 
     x >= (v.x - EPSILON) && x <= (v.x + EPSILON) &&
     y >= (v.y - EPSILON) && y <= (v.y + EPSILON) &&
     z >= (v.z - EPSILON) && z <= (v.z + EPSILON) &&
@@ -104,5 +108,9 @@ class RTuple
     (y == other.y) &&
     (z == other.z) &&
     (w == other.w)
+  end
+
+  def reflect(normal)
+    self - (normal * 2.0 * self.dot(normal))
   end
 end
