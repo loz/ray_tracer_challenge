@@ -12,6 +12,8 @@ end
 
 
 class Intersections
+  getter set
+
   def initialize()
     @set = [] of Intersection
   end
@@ -36,12 +38,21 @@ class Intersections
   def [](idx)
     @set[idx]
   end
+
+  def append(other)
+    @set += other.set
+    @set.sort!
+  end
 end
 
 class Intersection
   getter t, object
 
   def initialize(@t : Float64, @object : Sphere)
+  end
+
+  def <=>(other)
+    t <=> other.t
   end
 
   def null?

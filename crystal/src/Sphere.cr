@@ -11,6 +11,11 @@ class Sphere
     @material = Materials.material()
   end
 
+  def ==(other)
+    @transform == other.transform &&
+    @material == other.material
+  end
+
   def intersect(ray)
     tray = ray.transform(transform.inverse)
 

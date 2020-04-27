@@ -10,6 +10,12 @@ module Lights
     
     def initialize(@position : RTuple, @intensity : RTuple)
     end
+
+    def ==(other)
+      return false if other.nil?
+      @position == other.position &&
+      @intensity == other.intensity
+    end
   end
 
 end
