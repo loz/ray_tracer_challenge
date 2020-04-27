@@ -58,6 +58,37 @@ class Intersection
   def null?
     false
   end
+
+  def prepare_computations(ray)
+    point = ray.position(t)
+    normalv = object.normal_at(point)
+    eyev = -ray.direction
+
+    if normalv.dot(eyev) < 0
+      normalv = -normalv
+      inside = true
+    else
+      inside = false
+    end
+
+    Computations.new t,
+      object,
+      point,
+      eyev,
+      normalv,
+      inside
+  end
+end
+
+class Intersection::Computations
+  getter t, object, point, eyev, normalv
+
+  def initialize(@t : Float64, @object : Sphere, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool)
+  end
+
+  def inside?
+    @inside
+  end
 end
 
 class NullIntersection < Intersection

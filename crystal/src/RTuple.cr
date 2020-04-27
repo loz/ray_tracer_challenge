@@ -123,3 +123,6 @@ class RTuple
     self - (normal * 2.0 * self.dot(normal))
   end
 end
+
+alias Point = RTuple
+alias Vector = RTuple

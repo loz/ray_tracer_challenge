@@ -73,4 +73,49 @@ Spectator.describe Intersection do
       end
     end
   end
+
+  describe "preparing computations" do
+    let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+    let(s) { sphere() }
+    let(i) { intersection(4.0, s) }
+    let(comps) { i.prepare_computations(r) }
+
+    it "has time of intersection" do
+      expect(comps.t).to eq i.t
+    end
+
+    it "has object of intersection" do
+      expect(comps.object).to eq i.object
+    end
+
+    it "has point relative to position" do
+      expect(comps.point).to eq point(0.0, 0.0, -1.0)
+    end
+
+    it "has eyev relative to direction of ray" do
+      expect(comps.eyev).to eq vector(0.0, 0.0, -1.0)
+    end
+
+    it "has normalv relative to normal of object + point" do
+      expect(comps.normalv).to eq vector(0.0, 0.0, -1.0)
+    end
+
+    describe "when occuring on the outside" do
+      it "is not inside" do
+        expect(comps.inside?).to eq false
+      end
+    end
+
+    describe "when occuring on the inside" do
+      let(r) { ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0)) }
+
+      it "is inside" do
+        expect(comps.inside?).to eq true
+      end
+
+      it "has inverted normal" do
+        expect(comps.normalv).to eq vector(0.0, 0.0, -1.0)
+      end
+    end
+  end
 end
