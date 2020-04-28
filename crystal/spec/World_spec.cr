@@ -69,4 +69,40 @@ Spectator.describe World do
     end
 
   end
+
+  describe "Color seen by ray in world" do
+    let(w) { default_world() }
+
+    describe "when ray misses object" do
+      let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 1.0, 0.0)) }
+
+      it "is black" do
+        c = w.color_at(r)
+	expect(c).to eq black
+      end
+    end
+
+    describe "when ray hits object" do
+      let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+
+      it "is the shaded color of the object" do
+      	c = w.color_at(r)
+      	expect(c.approximate?(color(0.38066, 0.47583, 0.2855))).to be true
+      end
+    end
+
+    describe "when the intersection is behind the ray" do
+      let(outer) { w.objects[0] }
+      let(inner) { w.objects[1] }
+      let(r) { ray(point(0.0, 0.0, 0.75), vector(0.0, 0.0, -1.0)) }
+
+      it "is material color" do
+        outer.material.ambient = 1.0
+	inner.material.ambient = 1.0
+
+	c = w.color_at(r)
+	expect(c).to eq inner.material.color
+      end
+    end
+  end
 end

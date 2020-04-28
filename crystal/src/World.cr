@@ -40,4 +40,15 @@ class World
       comps.object.material.lighting(light, comps.point, comps.eyev, comps.normalv)
     end
   end
+
+  def color_at(ray)
+    intersects = intersect(ray)
+    hit = intersects.hit
+    if hit.null?
+      black
+    else
+      comps = hit.prepare_computations(ray)
+      shade_hit(comps)
+    end
+  end
 end
