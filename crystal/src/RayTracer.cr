@@ -8,6 +8,7 @@ require "./Lights"
 require "./Materials" 
 require "./Sphere"
 require "./World"
+require "./Camera"
 
 module RayTracer
   VERSION = "0.1.0"
