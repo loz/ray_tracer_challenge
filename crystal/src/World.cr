@@ -19,7 +19,11 @@ end
 
 class World
   property objects = [] of Sphere
-  property light : Lights::Point | Nil
+  property light : Lights::Point
+
+  def initialize()
+    @light = point_light(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 0.0))
+  end
 
   def intersect(r)
     intersections = Intersections.new
@@ -27,5 +31,13 @@ class World
       intersections.append(object.intersect(r))
     end
     intersections
+  end
+
+  def shade_hit(comps)
+    if light.nil?
+      black
+    else
+      comps.object.material.lighting(light, comps.point, comps.eyev, comps.normalv)
+    end
   end
 end

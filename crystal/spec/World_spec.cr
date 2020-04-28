@@ -7,10 +7,6 @@ Spectator.describe World do
     it "contains no objects" do
       expect(w.objects.size).to eq 0
     end
-
-    it "has no light source" do
-      expect(w.light).to eq nil
-    end
   end
 
   describe "The Default World" do
@@ -56,5 +52,21 @@ Spectator.describe World do
       expect(xs[2].t).to eq 5.5
       expect(xs[3].t).to eq 6.0
     end
+  end
+
+  describe "Shading an intersection" do
+    let(w) { default_world() }
+    let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+
+    let(s) { w.objects.first }
+    let(i) { intersection(4.0, s) }
+
+    let(comps) { i.prepare_computations(r) }
+
+    it "calculates the color for the hit" do
+      c = w.shade_hit(comps)
+      expect(c.approximate?(color(0.38066, 0.47583, 0.2855))).to be true
+    end
+
   end
 end
