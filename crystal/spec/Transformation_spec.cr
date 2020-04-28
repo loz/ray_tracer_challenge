@@ -203,4 +203,59 @@ Spectator.describe Transformation do
       expect(p4.approximate?(point(15.0, 0.0, 7.0))).to eq true
     end
   end
+
+  describe "View Transformation" do
+    describe "has a dfault orientation" do
+      let(from) { point(0.0, 0.0, 0.0) }
+      let(to) { point(0.0, 0.0, -1.0) }
+      let(up) { vector(0.0, 1.0, 0.0) }
+
+      it "has the identity matrix" do
+        t = view_transform(from, to, up)
+
+	expect(t).to eq identity_matrix
+      end
+    end
+
+    describe "looking in positive z" do
+      let(from) { point(0.0, 0.0, 0.0) }
+      let(to) { point(0.0, 0.0, 1.0) }
+      let(up) { vector(0.0, 1.0, 0.0) }
+
+      it "has reflected view" do
+        t = view_transform(from, to, up)
+
+	expect(t).to eq scaling(-1.0, 1.0, -1.0)
+      end
+    end
+
+    describe "moving the world" do
+      let(from) { point(0.0, 0.0, 8.0) }
+      let(to) { point(0.0, 0.0, 0.0) }
+      let(up) { vector(0.0, 1.0, 0.0) }
+
+      it "has translated view" do
+        t = view_transform(from, to, up)
+
+	expect(t).to eq translation(0.0, 0.0, -8.0)
+      end
+    end
+
+    describe "an arbitrary view transformation" do
+      let(from) { point(1.0, 3.0, 2.0) }
+      let(to) { point(4.0, -2.0, 8.0) }
+      let(up) { vector(1.0, 1.0, 0.0) }
+  
+      it "transformed matrix" do
+        t = view_transform(from, to, up)
+
+	expect(t.approx(matrix({
+	  {-0.50709, 0.50709, 0.67612,-2.36643},
+	  { 0.76772, 0.60609, 0.12122,-2.82843},
+	  {-0.35857, 0.59761,-0.71714, 0.00000},
+	  { 0.00000, 0.00000, 0.00000, 1.00000}
+	}))).to be true
+      end
+    end
+  end
 end

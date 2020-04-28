@@ -52,6 +52,21 @@ def rotation_x(r)
   })
 end
 
+def view_transform(from, to, up)
+  forward = (to - from).normalize
+  upn = up.normalize
+  left = forward.cross(upn)
+  true_up = left.cross(forward)
+
+  orientation = matrix({
+    {left.x,     left.y,     left.z,     0.0},
+    {true_up.x,  true_up.y,  true_up.z,  0.0},
+    {-forward.x, -forward.y, -forward.z, 0.0},
+    {0.0,        0.0,        0.0,        1.0}
+  })
+  orientation * translation(-from.x, -from.y, -from.z)
+end
+
 class Matrix::Base
   def rotate_x(r)
     rotation_x(r) * self
