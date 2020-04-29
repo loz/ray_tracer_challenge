@@ -27,12 +27,14 @@ module Materials
       @shininess == other.shininess
     end
 
-    def lighting(light, position, eyev, normalv)
+    def lighting(light, position, eyev, normalv, in_shadow = false)
       effective_color = color * light.intensity 
 
       lightv = (light.position - position).normalize
 
       e_ambient = effective_color * ambient
+
+      return color(e_ambient) if in_shadow
 
       #light normal is relatied to angle of light + normal
       light_dot_normal = lightv.dot(normalv)

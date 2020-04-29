@@ -76,5 +76,18 @@ Spectator.describe Materials do
 	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
     end
+
+    describe "Lighting with surface in shadow" do
+      let(eyev) { vector(0.0, 0.0, -1.0) }
+      let(normalv) { vector(0.0, 0.0, -1.0) }
+      let(light) { point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0)) }
+      let(in_shadow) { true }
+
+      it "has a resulting color" do
+        result = m.lighting(light, position, eyev, normalv, in_shadow)
+
+	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
+      end
+    end
   end
 end
