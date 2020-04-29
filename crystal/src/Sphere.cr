@@ -2,23 +2,9 @@ def sphere()
   Sphere.new()
 end
 
-class Sphere
-  property transform : Matrix::Base
-  property material : Materials::Base
+class Sphere < Shape
 
-  def initialize()
-    @transform = identity_matrix
-    @material = Materials.material()
-  end
-
-  def ==(other)
-    @transform == other.transform &&
-    @material == other.material
-  end
-
-  def intersect(ray)
-    tray = ray.transform(transform.inverse)
-
+  def implement_intersect(tray)
     result = Intersections.new
 
     s = tray.origin - point(0.0, 0.0, 0.0)
@@ -42,13 +28,8 @@ class Sphere
 	)
   end
 
-  def normal_at(p)
-    object_point = transform.inverse * p
-    object_normal = object_point - point(0.0, 0.0, 0.0)
-
-    world_normal = transform.inverse.transpose * object_normal
-    world_normal.fix_vector_w!
-    return world_normal.normalize
+  def implement_normal_at(object_point)
+    object_point - point(0.0, 0.0, 0.0)
   end
 
 end
