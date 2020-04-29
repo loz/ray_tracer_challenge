@@ -12,6 +12,7 @@ end
 
 
 class Intersections
+  EPSILON = 0.0001
   getter set
 
   def initialize()
@@ -46,6 +47,7 @@ class Intersections
 end
 
 class Intersection
+  EPSILON = 0.0001
   getter t, object
 
   def initialize(@t : Float64, @object : Sphere)
@@ -67,8 +69,10 @@ class Intersection
     if normalv.dot(eyev) < 0
       normalv = -normalv
       inside = true
+      over_point = point + normalv * EPSILON
     else
       inside = false
+      over_point = point + normalv * EPSILON
     end
 
     Computations.new t,
@@ -76,14 +80,15 @@ class Intersection
       point,
       eyev,
       normalv,
-      inside
+      inside,
+      over_point
   end
 end
 
 class Intersection::Computations
-  getter t, object, point, eyev, normalv
+  getter t, object, point, eyev, normalv, over_point
 
-  def initialize(@t : Float64, @object : Sphere, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool)
+  def initialize(@t : Float64, @object : Sphere, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point)
   end
 
   def inside?

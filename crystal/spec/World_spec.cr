@@ -1,4 +1,3 @@
-require "./spec_helper"
 
 Spectator.describe World do
   describe "Creating A World" do
@@ -68,6 +67,26 @@ Spectator.describe World do
       expect(c.approximate?(color(0.38066, 0.47583, 0.2855))).to be true
     end
 
+    describe "when intersecting a shadow" do
+      let(w) { world }
+      let(r) { ray(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0)) }
+
+
+      it "counts as shaded" do
+        w.light = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0))
+	s1 = sphere()
+	w.objects << s1
+	s2 = sphere()
+	s2.transform = translation(0.0, 0.0, 10.0)
+	w.objects << s2
+	i = intersection(4.0, s2)
+
+	comps = i.prepare_computations(r)
+	c = w.shade_hit(comps)
+	expect(c.approximate?(color(0.1, 0.1, 0.1))).to be true
+      end
+    end
+
   end
 
   describe "Color seen by ray in world" do
@@ -102,6 +121,41 @@ Spectator.describe World do
 
 	c = w.color_at(r)
 	expect(c).to eq inner.material.color
+      end
+    end
+  end
+
+  describe "Calculating Shadows" do
+    let(w) { default_world }
+
+    describe "when nothing collinear to point and light" do
+      let(p) { point(0.0, 10.0, 0.0) }
+
+      it "is not in shadow" do
+        expect(w.is_shadowed?(p)).to be false
+      end
+    end
+
+    describe "when object betwen point and the light" do
+      let(p) { point(10.0, -10.0, 10.0) }
+
+      it "is in shadow" do
+        expect(w.is_shadowed?(p)).to be true
+      end
+    end
+
+    describe "when object behind the light" do
+      let(p) { point(-20.0, 20.0, -20.0) }
+
+      it "is not in shadow" do
+        expect(w.is_shadowed?(p)).to be false
+      end
+    end
+    describe "when object behind the point" do
+      let(p) { point(-2.0, 2.0, -2.0) }
+
+      it "is not in shadow" do
+        expect(w.is_shadowed?(p)).to be false
       end
     end
   end

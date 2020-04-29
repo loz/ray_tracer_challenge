@@ -33,11 +33,28 @@ class World
     intersections
   end
 
+  def is_shadowed?(point)
+    v = light.position - point
+    distance = v.magnitude
+    direction = v.normalize
+
+    r = ray(point, direction)
+    intersections = intersect(r)
+
+    h = intersections.hit
+    if !h.null? && h.t < distance
+      return true
+    else
+      return false
+    end
+  end
+
   def shade_hit(comps)
     if light.nil?
       black
     else
-      comps.object.material.lighting(light, comps.point, comps.eyev, comps.normalv)
+      shadow = is_shadowed?(comps.over_point)
+      comps.object.material.lighting(light, comps.point, comps.eyev, comps.normalv, shadow)
     end
   end
 
