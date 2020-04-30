@@ -18,7 +18,7 @@ def default_world()
 end
 
 class World
-  property objects = [] of Sphere
+  property objects = [] of Shape
   property light : Lights::Point
 
   def initialize()

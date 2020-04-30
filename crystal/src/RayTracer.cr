@@ -8,6 +8,7 @@ require "./Lights"
 require "./Materials" 
 require "./Shape"
 require "./Sphere"
+require "./Plane"
 require "./World"
 require "./Camera"
 

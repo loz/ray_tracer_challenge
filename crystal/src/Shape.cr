@@ -17,6 +17,10 @@ class Shape
     implement_intersect(tray)
   end
 
+  def implement_intersect(ray)
+    raise "NotImplemented"
+  end
+
   def normal_at(p)
     object_point = transform.inverse * p
     object_normal = implement_normal_at(object_point)
@@ -24,6 +28,10 @@ class Shape
     world_normal = transform.inverse.transpose * object_normal
     world_normal.fix_vector_w!
     return world_normal.normalize
+  end
+
+  def implement_normal_at(point)
+    raise "NotImplemented"
   end
 end
 

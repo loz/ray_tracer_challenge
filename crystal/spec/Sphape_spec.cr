@@ -9,6 +9,7 @@ class TestShape < Shape
 
   def implement_intersect(ray)
     @saved_ray = ray
+    Intersections.new
   end
 
   def implement_normal_at(point)
