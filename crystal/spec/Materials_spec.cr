@@ -89,5 +89,25 @@ Spectator.describe Materials do
 	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
     end
+    
+    describe "Lighting with a Pattern" do
+      let(p) { stripe_pattern(white, black) }
+      let(eyev) { vector(0.0, 0.0, -1.0) }
+      let(normalv) { vector(0.0, 0.0, -1.0) }
+      let(light) { point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0)) }
+
+      it "accounts for material pattern color" do
+        m.pattern = p
+	m.ambient = 1.0
+	m.diffuse = 0.0
+	m.specular = 0.0
+
+	c1 = m.lighting(light, point(0.9, 0.0, 0.0), eyev, normalv, false)
+	c2 = m.lighting(light, point(1.1, 0.0, 0.0), eyev, normalv, false)
+
+	expect(c1).to eq white
+	expect(c2).to eq black
+      end
+    end
   end
 end

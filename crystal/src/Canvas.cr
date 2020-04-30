@@ -10,6 +10,10 @@ def black()
   color(0.0, 0.0, 0.0)
 end
 
+def white()
+  color(1.0, 1.0, 1.0)
+end
+
 class Canvas
   getter width, height
   def initialize(@width : Int32, @height : Int32)

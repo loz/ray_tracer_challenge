@@ -10,6 +10,9 @@ camera_scene.ppm: camera_scene.cr
 plane_scene.ppm: plane_scene.cr
 	crystal run plane_scene.cr
 
+stripe_scene.ppm: stripe_scene.cr
+	crystal run stripe_scene.cr
+
 all : sphere_material.ppm sphere_material.ppm 
 
 test :

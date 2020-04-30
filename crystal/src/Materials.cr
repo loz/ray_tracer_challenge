@@ -9,6 +9,7 @@ module Materials
 
   class Base
     property color : RTuple
+    property pattern : Pattern | Nil
     property ambient, diffuse, specular, shininess
 
     def initialize()
@@ -29,6 +30,9 @@ module Materials
 
     def lighting(light, position, eyev, normalv, in_shadow = false)
       effective_color = color * light.intensity 
+      pattern.try do |pattern|
+         effective_color = pattern.at(position) * light.intensity
+      end
 
       lightv = (light.position - position).normalize
 
