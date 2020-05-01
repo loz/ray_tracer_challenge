@@ -18,14 +18,23 @@ class Camera
   end
 
   def render(world)
+    #channel = Channel(Int32).new
+
     image = Canvas.new(hsize, vsize)
     (0...vsize).each do |y|
-      (0...hsize).each do |x|
-        ray = ray_for_pixel(x, y)
-        color = world.color_at(ray)
-        image.write_pixel(x, y, color)
-      end
+      #spawn do
+        (0...hsize).each do |x|
+          ray = ray_for_pixel(x, y)
+          color = world.color_at(ray)
+          image.write_pixel(x, y, color)
+        end
+	#channel.send y
+      #end
     end
+    #(0...vsize).each do
+    #  channel.receive
+    #  putc "."
+    #end
     image
   end
 
