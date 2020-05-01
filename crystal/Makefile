@@ -16,7 +16,13 @@ stripe_scene.ppm: stripe_scene.cr src/*
 grad_scene.ppm: grad_scene.cr src/*
 	crystal run grad_scene.cr
 
-all : sphere_material.ppm sphere_material.ppm 
+rings_scene.ppm: rings_scene.cr src/*
+	crystal run rings_scene.cr
+
+checks_scene.ppm: checks_scene.cr src/*
+	crystal run checks_scene.cr
+
+all : *.ppm
 
 test :
 	crystal spec

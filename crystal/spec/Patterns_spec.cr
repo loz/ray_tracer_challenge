@@ -77,4 +77,36 @@ Spectator.describe Patterns do
     end
   end
 
+  describe "Ring Pattern" do
+    let(pattern) { ring_pattern(white, black) }
+
+    it "extends in x and y" do
+      expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(1.0, 0.0, 0.0)).approximate?(black)).to be true
+      expect(pattern.at(point(0.0, 0.0, 1.0)).approximate?(black)).to be true
+      expect(pattern.at(point(0.708, 0.0, 0.708)).approximate?(black)).to be true
+    end
+  end
+
+  describe "Checker Pattern" do
+    let(pattern) { checks_pattern(white, black) }
+
+    it "repeats in x" do
+      expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(0.99, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(1.01, 0.0, 0.0)).approximate?(black)).to be true
+    end
+
+    it "repeats in y" do
+      expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(0.0, 0.99, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(0.0, 1.01, 0.0)).approximate?(black)).to be true
+    end
+
+    it "repeats in z" do
+      expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(0.0, 0.0, 0.99)).approximate?(white)).to be true
+      expect(pattern.at(point(0.0, 0.0, 1.01)).approximate?(black)).to be true
+    end
+  end
 end

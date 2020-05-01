@@ -25,6 +25,13 @@ def gradient_pattern(a, b)
   Gradient.new(a, b)
 end
 
+def ring_pattern(a, b)
+  Rings.new(a, b)
+end
+
+def checks_pattern(a, b)
+  Checks.new(a, b)
+end
 
 class Stripe < Pattern
 
@@ -49,5 +56,27 @@ class Gradient < Pattern
   def at(point)
      fraction = point.x - point.x.floor
      a + (@distance * fraction)
+  end
+end
+
+class Rings < Pattern
+  def at(point)
+    dist = Math.sqrt((point.x * point.x) + (point.z * point.z)).floor.to_i
+    if dist % 2 == 0
+      a
+    else
+      b
+    end
+  end
+end
+
+class Checks < Pattern
+  def at(point)
+    dist = point.x.floor + point.y.floor + point.z.floor
+    if dist % 2 == 0
+      a
+    else
+      b
+    end
   end
 end
