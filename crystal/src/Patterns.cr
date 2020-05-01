@@ -1,16 +1,38 @@
+alias Tint = Canvas::Color | Pattern
+
 class Pattern
   getter a, b
   property transform : Matrix::Base
 
-  def initialize(@a : Canvas::Color, @b : Canvas::Color)
+  def initialize(@a : Tint, @b : Tint)
     @transform = identity_matrix
   end
 
-  def at(point)
+  def at(point) : Canvas::Color
     white
   end
 
-  def at_object(object, world_point)
+  def tint_a(point) : Canvas::Color
+    if a.is_a? Pattern
+      p = a.as(Pattern)
+      pattern_point = p.transform.inverse * point
+      p.at(pattern_point)
+    else
+      a.as(Canvas::Color)
+    end
+  end
+
+  def tint_b(point) : Canvas::Color
+    if b.is_a? Pattern
+      p = b.as(Pattern)
+      pattern_point = p.transform.inverse * point
+      p.at(pattern_point)
+    else
+      b.as(Canvas::Color)
+    end
+  end
+
+  def at_object(object, world_point) : Canvas::Color
     object_point = object.transform.inverse * world_point
     pattern_point = @transform.inverse * object_point
     at(pattern_point)
@@ -37,46 +59,48 @@ class Stripe < Pattern
 
   def at(point)
     if point.x.floor.to_i % 2 == 0
-      a
+      tint_a(point)
     else
-      b
+      tint_b(point)
     end
   end
 
 end
 
 class Gradient < Pattern
-  getter distance : RTuple
-
-  def initialize(a, b)
-    super
-    @distance = b - a  
-  end
-
   def at(point)
+     ta = tint_a(point)
+     tb = tint_b(point)
+     distance = tb - ta  
      fraction = point.x - point.x.floor
-     a + (@distance * fraction)
+     ta + (distance * fraction)
   end
 end
 
 class Rings < Pattern
   def at(point)
+    ta = tint_a(point)
+    tb = tint_b(point)
+
     dist = Math.sqrt((point.x * point.x) + (point.z * point.z)).floor.to_i
     if dist % 2 == 0
-      a
+      ta
     else
-      b
+      tb
     end
   end
 end
 
 class Checks < Pattern
   def at(point)
-    dist = point.x.floor + point.y.floor + point.z.floor
+    ta = tint_a(point)
+    tb = tint_b(point)
+
+    dist = point.x.floor.to_i + point.y.floor.to_i + point.z.floor.to_i
     if dist % 2 == 0
-      a
+      ta
     else
-      b
+      tb
     end
   end
 end

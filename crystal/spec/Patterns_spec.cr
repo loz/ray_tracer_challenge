@@ -4,8 +4,8 @@ Spectator.describe Patterns do
     let(pattern) { stripe_pattern(white, black) }
 
     it "has properties" do
-      expect(pattern.a).to eq white
-      expect(pattern.b).to eq black
+      expect(pattern.a.as(Canvas::Color)).to eq white
+      expect(pattern.b.as(Canvas::Color)).to eq black
     end
 
     it "is constant in y" do
@@ -107,6 +107,32 @@ Spectator.describe Patterns do
       expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
       expect(pattern.at(point(0.0, 0.0, 0.99)).approximate?(white)).to be true
       expect(pattern.at(point(0.0, 0.0, 1.01)).approximate?(black)).to be true
+    end
+  end
+
+  describe "Nesting Pattern" do
+    let(stripe1) do
+      p = stripe_pattern(white, black)
+      p.transform = scaling(0.25, 0.25, 0.25)
+      p
+    end
+    let(stripe2) do
+      p = stripe_pattern(white, black)
+      p.transform = scaling(0.25, 0.25, 0.25) *
+                      rotation_z(Math::PI/2)
+      p
+    end
+
+    let(nested) { checks_pattern(stripe1, stripe2) }
+
+    it "uses the pattern in place of a color" do
+      expect(nested.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(nested.at(point(0.26, 0.0, 0.0)).approximate?(black)).to be true
+      expect(nested.at(point(0.51, 0.0, 0.0)).approximate?(white)).to be true
+
+      expect(nested.at(point(1.26, 0.0, 0.0)).approximate?(white)).to be true
+      expect(nested.at(point(1.26, 0.26, 0.0)).approximate?(black)).to be true
+      expect(nested.at(point(1.26, 0.51, 0.0)).approximate?(white)).to be true
     end
   end
 end

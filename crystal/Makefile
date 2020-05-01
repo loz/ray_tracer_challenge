@@ -22,6 +22,9 @@ rings_scene.ppm: rings_scene.cr src/*
 checks_scene.ppm: checks_scene.cr src/*
 	crystal run checks_scene.cr
 
+nested_pattern_scene.ppm: nested_pattern_scene.cr src/*
+	crystal run nested_pattern_scene.cr
+
 all : *.ppm
 
 test :
