@@ -95,12 +95,10 @@ class Checks < Pattern
   def at(point)
     ta = tint_a(point)
     tb = tint_b(point)
-
-    dist = point.x.floor.to_i + point.y.floor.to_i + point.z.floor.to_i
-    if dist % 2 == 0
-      ta
-    else
-      tb
-    end
+    x = point.x
+    y = point.y
+    z = point.z 
+    dist = (x.floor + y.floor + z.floor)
+    dist % 2 == 0 ? ta : tb
   end
 end
