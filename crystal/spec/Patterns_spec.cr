@@ -66,5 +66,15 @@ Spectator.describe Patterns do
 
   end
 
+  describe "Gradient" do
+    let(pattern) { gradient_pattern(white, black) }
+
+    it "has blended colors" do
+      expect(pattern.at(point(0.0, 0.0, 0.0)).approximate?(white)).to be true
+      expect(pattern.at(point(0.25, 0.0, 0.0)).approximate?(color(0.75, 0.75, 0.75))).to be true
+      expect(pattern.at(point(0.5, 0.0, 0.0)).approximate?(color(0.5, 0.5, 0.5))).to be true
+      expect(pattern.at(point(0.75, 0.0, 0.0)).approximate?(color(0.25, 0.25, 0.25))).to be true
+    end
+  end
 
 end
