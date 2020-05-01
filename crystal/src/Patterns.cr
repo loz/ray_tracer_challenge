@@ -1,6 +1,18 @@
 class Pattern
+  property transform : Matrix::Base
+
+  def initialize()
+    @transform = identity_matrix
+  end
+
   def at(point)
     white
+  end
+
+  def at_object(object, world_point)
+    object_point = object.transform.inverse * world_point
+    pattern_point = @transform.inverse * object_point
+    at(pattern_point)
   end
 end
 
@@ -14,6 +26,7 @@ class Stripe < Pattern
   getter a, b
 
   def initialize(@a : Canvas::Color, @b : Canvas::Color)
+    super()
   end
 
   def at(point)

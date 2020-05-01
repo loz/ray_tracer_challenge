@@ -28,10 +28,10 @@ module Materials
       @shininess == other.shininess
     end
 
-    def lighting(light, position, eyev, normalv, in_shadow = false)
+    def lighting(object, light, position, eyev, normalv, in_shadow = false)
       effective_color = color * light.intensity 
       pattern.try do |pattern|
-         effective_color = pattern.at(position) * light.intensity
+         effective_color = pattern.at_object(object, position) * light.intensity
       end
 
       lightv = (light.position - position).normalize

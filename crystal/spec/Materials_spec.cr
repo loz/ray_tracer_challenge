@@ -1,6 +1,7 @@
 require "./spec_helper"
 
 Spectator.describe Materials do
+  let(object) { sphere }
   describe "Default" do
     let(m) { material() }
     it "has ambient, diffuse, specular and shinyness properties" do
@@ -23,7 +24,7 @@ Spectator.describe Materials do
       let(light) { point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0)) }
 
       it "has a resulting color" do
-        result = m.lighting(light, position, eyev, normalv)
+        result = m.lighting(object, light, position, eyev, normalv)
 
 	expect(result).to eq color(1.9, 1.9, 1.9)
       end
@@ -35,7 +36,7 @@ Spectator.describe Materials do
       let(light) { point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0)) }
 
       it "has a resulting color" do
-        result = m.lighting(light, position, eyev, normalv)
+        result = m.lighting(object, light, position, eyev, normalv)
 
 	expect(result.approximate?(color(1.0, 1.0, 1.0))).to be true
       end
@@ -47,7 +48,7 @@ Spectator.describe Materials do
       let(light) { point_light(point(0.0, 10.0, -10.0), color(1.0, 1.0, 1.0)) }
 
       it "has a resulting color" do
-        result = m.lighting(light, position, eyev, normalv)
+        result = m.lighting(object, light, position, eyev, normalv)
 	
 	expect(result.approximate?(color(0.7364, 0.7364, 0.7364))).to be true
       end
@@ -59,7 +60,7 @@ Spectator.describe Materials do
       let(light) { point_light(point(0.0, 10.0, -10.0), color(1.0, 1.0, 1.0)) }
 
       it "has a resulting color" do
-        result = m.lighting(light, position, eyev, normalv)
+        result = m.lighting(object, light, position, eyev, normalv)
 
 	expect(result.approximate?(color(1.6364, 1.6364, 1.6364))).to be true
       end
@@ -71,7 +72,7 @@ Spectator.describe Materials do
       let(light) { point_light(point(0.0, 0.0, 10.0), color(1.0, 1.0, 1.0)) }
 
       it "has a resulting ambient color" do
-        result = m.lighting(light, position, eyev, normalv)
+        result = m.lighting(object, light, position, eyev, normalv)
 
 	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
@@ -84,7 +85,7 @@ Spectator.describe Materials do
       let(in_shadow) { true }
 
       it "has a resulting color" do
-        result = m.lighting(light, position, eyev, normalv, in_shadow)
+        result = m.lighting(object, light, position, eyev, normalv, in_shadow)
 
 	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
@@ -102,8 +103,8 @@ Spectator.describe Materials do
 	m.diffuse = 0.0
 	m.specular = 0.0
 
-	c1 = m.lighting(light, point(0.9, 0.0, 0.0), eyev, normalv, false)
-	c2 = m.lighting(light, point(1.1, 0.0, 0.0), eyev, normalv, false)
+	c1 = m.lighting(object, light, point(0.9, 0.0, 0.0), eyev, normalv, false)
+	c2 = m.lighting(object, light, point(1.1, 0.0, 0.0), eyev, normalv, false)
 
 	expect(c1).to eq white
 	expect(c2).to eq black

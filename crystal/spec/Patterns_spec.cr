@@ -30,6 +30,40 @@ Spectator.describe Patterns do
       expect(pattern.at(point(-1.1, 0.0, 0.0))).to eq white
     end
 
+    describe "with an object transformation" do
+      let(object) { sphere }
+
+      it "has transformed patter" do
+        object.transform = scaling(2.0, 2.0, 2.0)
+	c = pattern.at_object(object, point(1.5, 0.0, 0.0))
+
+	expect(c).to eq white
+      end
+    end
+
+    describe "with a pattern transformation" do
+      let(object) { sphere }
+
+      it "has transformed patter" do
+        pattern.transform = scaling(2.0, 2.0, 2.0)
+	c = pattern.at_object(object, point(1.5, 0.0, 0.0))
+
+	expect(c).to eq white
+      end
+    end
+
+    describe "with a both object and pattern transformation" do
+      let(object) { sphere }
+
+      it "has transformed patter" do
+        object.transform = scaling(2.0, 2.0, 2.0)
+        pattern.transform = translation(0.5, 0.0, 0.0)
+	c = pattern.at_object(object, point(2.5, 0.0, 0.0))
+
+	expect(c).to eq white
+      end
+    end
+
   end
 
 

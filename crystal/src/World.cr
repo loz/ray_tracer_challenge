@@ -54,7 +54,7 @@ class World
       black
     else
       shadow = is_shadowed?(comps.over_point)
-      comps.object.material.lighting(light, comps.point, comps.eyev, comps.normalv, shadow)
+      comps.object.material.lighting(comps.object, light, comps.point, comps.eyev, comps.normalv, shadow)
     end
   end
 
