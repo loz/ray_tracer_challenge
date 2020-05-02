@@ -11,7 +11,7 @@ def intersections(*ilist)
 end
 
 
-class Intersections
+struct Intersections
   EPSILON = 0.0001
   getter set
 
@@ -88,7 +88,7 @@ class Intersection
   end
 end
 
-class Intersection::Computations
+struct Intersection::Computations
   getter t, object, point, eyev, normalv, over_point, reflectv
 
   def initialize(@t : Float64, @object : Shape, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point, @reflectv : Vector)

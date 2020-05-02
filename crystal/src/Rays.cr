@@ -3,7 +3,7 @@ def ray(o, d)
 end
 
 
-class Rays
+struct Rays
   getter origin, direction
 
   def initialize(@origin : RTuple, @direction : RTuple); end

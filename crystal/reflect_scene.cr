@@ -51,8 +51,8 @@ world.objects << left
 
 world.light = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0))
 
-camera = camera(500, 250, Math::PI/3.0)
-#camera = camera(100, 50, Math::PI/3.0)
+#camera = camera(500, 250, Math::PI/3.0)
+camera = camera(100, 50, Math::PI/3.0)
 camera.transform = view_transform(point(0.0, 1.5, -5.0),
                                   point(0.0, 1.0, 0.0),
                                   vector(0.0, 1.0, 0.0))

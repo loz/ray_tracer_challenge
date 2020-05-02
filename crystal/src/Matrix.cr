@@ -13,7 +13,7 @@ def identity_matrix()
 end
 
 module Matrix
-  class Base
+  struct Base
     getter size : Int32
 
     def initialize(tuple)

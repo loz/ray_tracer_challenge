@@ -27,7 +27,7 @@ def blue()
 end
 
 
-class Canvas
+struct Canvas
   getter width, height
   def initialize(@width : Int32, @height : Int32)
      @canvas = Array(Array(Color)).new
@@ -95,7 +95,9 @@ class Canvas
 end
 
 
-class Canvas::Color < RTuple
+alias Canvas::Color = RTuple
+
+struct RTuple
   def red; x; end
   def green; y; end
   def blue; z; end

@@ -10,7 +10,7 @@ def vector(x, y, z)
   RTuple.new(x, y, z, 0.0)
 end
 
-class RTuple
+struct RTuple
   getter :x, :y, :z, :w
   def initialize(@x : Float64, @y : Float64, @z : Float64, @w : Float64)
   end

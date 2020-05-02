@@ -67,7 +67,7 @@ def view_transform(from, to, up)
   orientation * translation(-from.x, -from.y, -from.z)
 end
 
-class Matrix::Base
+struct Matrix::Base
   def rotate_x(r)
     rotation_x(r) * self
   end

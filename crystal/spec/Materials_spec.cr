@@ -99,15 +99,15 @@ Spectator.describe Materials do
 
       it "accounts for material pattern color" do
         m.pattern = p
-	m.ambient = 1.0
-	m.diffuse = 0.0
-	m.specular = 0.0
+	      m.ambient = 1.0
+	      m.diffuse = 0.0
+	      m.specular = 0.0
 
-	c1 = m.lighting(object, light, point(0.9, 0.0, 0.0), eyev, normalv, false)
-	c2 = m.lighting(object, light, point(1.1, 0.0, 0.0), eyev, normalv, false)
+	      c1 = m.lighting(object, light, point(0.9, 0.0, 0.0), eyev, normalv, false)
+	      c2 = m.lighting(object, light, point(1.1, 0.0, 0.0), eyev, normalv, false)
 
-	expect(c1).to eq white
-	expect(c2).to eq black
+	      expect(c1).to eq white
+	      expect(c2).to eq black
       end
     end
   end
