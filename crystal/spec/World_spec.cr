@@ -159,4 +159,86 @@ Spectator.describe World do
       end
     end
   end
+
+  describe "Reflections" do
+    let(w) { default_world }
+    let(r) { ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0)) }
+    let(shape) do
+      s = w.objects[1]
+      s.material.ambient = 1.0
+      s
+    end
+    let(i) { intersection(1.0, shape) }
+    let(comps) { i.prepare_computations(r) }
+
+    describe "for a nonreflective material" do
+      it "is black" do
+        expect(w.reflected_color(comps)).to eq black
+      end
+    end
+
+    describe "for mutually reflective surfaces" do
+      let(light) { point_light(point(0.0, 0.0, 0.0), color(1.0, 1.0, 1.0)) }
+      let(w) { world() }
+      before_each do
+        w.light = light
+        lower = plane()
+        lower.material.reflective = 1.0
+        lower.transform = translation(0.0, -1.0, 0.0)
+        w.objects << lower
+        upper = plane()
+        upper.material.reflective = 1.0
+        upper.transform = translation(0.0, 1.0, 0.0)
+        w.objects << upper
+      end
+      let(r) { ray(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0)) }
+
+      it "does not reflect in infinite loop" do
+        c = w.color_at(r)
+      end
+    end
+
+    describe "recursive depth" do
+      let(w) { default_world }
+      let(shape) do
+        s = plane()
+        s.material.reflective = 0.5
+        s.transform = translation(0.0, -1.0, 0.0)
+        s
+      end
+      let(r) { ray(point(0.0, 0.0, -3.0), vector(0.0, -Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0)) }
+      let(i) { intersection(Math.sqrt(2.0), shape) }
+      let(comps) { i.prepare_computations(r) }
+
+      it "does not reflect when reached" do
+        expect(w.reflected_color(comps, 0)).to eq black
+      end
+    end
+
+
+    describe "for a reflective material" do
+      let(shape) do
+        s = plane()
+        s.material.reflective = 0.5
+        s.transform = translation(0.0, -1.0, 0.0)
+        w.objects << s
+        s
+      end
+      let(r) { ray(point(0.0, 0.0, -3.0), vector(0.0, -Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0)) }
+      let(i) { intersection(Math.sqrt(2.0), shape) }
+      let(comps) { i.prepare_computations(r) }
+      
+      it "includes the reflective color" do
+        c = color(0.190347, 0.237934, 0.142760)
+        expect(w.reflected_color(comps).approximate?(c)).to be true
+      end
+
+      describe "shade_hit" do
+        it "caclulates the color" do
+         c = color(0.87677, 0.92436, 0.82918)
+         expect(w.shade_hit(comps).approximate?(c)).to be true
+        end
+      end
+    end
+  end
 end

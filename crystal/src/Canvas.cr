@@ -99,4 +99,8 @@ class Canvas::Color < RTuple
   def red; x; end
   def green; y; end
   def blue; z; end
+
+  def +(other : Canvas::Color)
+    color(red + other.red, green + other.green, blue + other.blue) 
+  end
 end

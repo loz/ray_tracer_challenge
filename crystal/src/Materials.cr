@@ -10,7 +10,7 @@ module Materials
   class Base
     property color : RTuple
     property pattern : Pattern | Nil
-    property ambient, diffuse, specular, shininess
+    property ambient, diffuse, specular, shininess, reflective
 
     def initialize()
       @color = color(1.0, 1.0, 1.0)
@@ -18,6 +18,7 @@ module Materials
       @diffuse = 0.9
       @specular = 0.9
       @shininess = 200.0
+      @reflective = 0.0
     end
 
     def ==(other)

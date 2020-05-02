@@ -25,6 +25,10 @@ checks_scene.ppm: checks_scene.cr src/*
 nested_pattern_scene.ppm: nested_pattern_scene.cr src/*
 	crystal run nested_pattern_scene.cr
 
+reflect_scene.ppm: reflect_scene.cr src/*
+	crystal run reflect_scene.cr
+
+
 all : *.ppm
 
 test :

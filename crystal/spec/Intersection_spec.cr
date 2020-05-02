@@ -100,6 +100,17 @@ Spectator.describe Intersection do
       expect(comps.normalv).to eq vector(0.0, 0.0, -1.0)
     end
 
+    describe "reflection vector" do
+      let(s) { plane() }
+      let(r) { ray(point(0.0, 1.0, -1.0), vector(0.0, -Math.sqrt(2)/2.0, Math.sqrt(2)/2.0)) }
+      let(i) { intersection(Math.sqrt(2.0), s) }
+
+      it "is included" do
+        comps = i.prepare_computations(r)
+        expect(comps.reflectv.approximate?(vector(0.0, Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0))).to be true
+      end
+    end
+
     describe "when occuring on the outside" do
       it "is not inside" do
         expect(comps.inside?).to eq false

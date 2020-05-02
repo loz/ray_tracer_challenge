@@ -75,20 +75,23 @@ class Intersection
       over_point = point + normalv * EPSILON
     end
 
+    reflectv = ray.direction.reflect(normalv)
+
     Computations.new t,
       object,
       point,
       eyev,
       normalv,
       inside,
-      over_point
+      over_point,
+      reflectv
   end
 end
 
 class Intersection::Computations
-  getter t, object, point, eyev, normalv, over_point
+  getter t, object, point, eyev, normalv, over_point, reflectv
 
-  def initialize(@t : Float64, @object : Shape, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point)
+  def initialize(@t : Float64, @object : Shape, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point, @reflectv : Vector)
   end
 
   def inside?

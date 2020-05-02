@@ -26,6 +26,10 @@ class RTuple
   def fix_vector_w!
     @w = 0.0
   end
+  
+  def fix_point_w!
+    @w = 1.0
+  end
 
   def magnitude
     Math.sqrt((x*x) + (y*y) + (z*z))

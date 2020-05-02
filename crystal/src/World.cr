@@ -49,23 +49,34 @@ class World
     end
   end
 
-  def shade_hit(comps)
+  def shade_hit(comps, recursion = 10)
     if light.nil?
       black
     else
       shadow = is_shadowed?(comps.over_point)
-      comps.object.material.lighting(comps.object, light, comps.point, comps.eyev, comps.normalv, shadow)
+      surface = comps.object.material.lighting(comps.object, light, comps.point, comps.eyev, comps.normalv, shadow)
+      reflected = reflected_color(comps, recursion)
+      surface + reflected
     end
   end
 
-  def color_at(ray)
+  def color_at(ray, recursion = 10)
     intersects = intersect(ray)
     hit = intersects.hit
     if hit.null?
       black
     else
       comps = hit.prepare_computations(ray)
-      shade_hit(comps)
+      shade_hit(comps, recursion)
     end
+  end
+
+  def reflected_color(comps, recursion = 10)
+    return black if recursion < 1
+    return black if comps.object.material.reflective == 0.0
+    reflect_ray = ray(comps.over_point, comps.reflectv)
+    rcolor = color_at(reflect_ray, recursion - 1)
+    rcolor = rcolor * comps.object.material.reflective
+    color(rcolor)
   end
 end

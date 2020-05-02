@@ -111,4 +111,12 @@ Spectator.describe Materials do
       end
     end
   end
+
+  describe "Reflectivity" do
+    let(m) { material() }
+
+    it "has none by default" do
+      expect(m.reflective).to eq 0.0
+    end
+  end
 end
