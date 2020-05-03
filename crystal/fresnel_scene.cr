@@ -17,21 +17,20 @@ floor.material.pattern = pattern
 
 
 glass = sphere()
-glass.transform = scaling(2.5, 2.5, 2.5) *
-                  translation(0.0, 0.0, 0.0)
+glass.transform = translation(0.0, 4.2, 0.0) *
+                  scaling(0.5, 0.5, 0.5)
 glass.material = material()
 glass.material.color = color(0.1, 0.1, 0.1)
 glass.material.diffuse = 0.7
 glass.material.specular = 0.3
-glass.material.reflective = 0.2
 glass.material.transparency = 0.8
 glass.material.refractive_index = 1.5
 
 air = sphere()
-air.transform = scaling(1.35, 1.35, 1.35) *
-                  translation(0.0, 0.0, 0.0)
+air.transform = translation(0.0, 4.2, 0.0) *
+                scaling(0.25, 0.25, 0.25)
 air.material = material()
-air.material.color = color(0.0, 0.0, 0.0)
+air.material.color = black
 air.material.transparency = 1.0
 air.material.refractive_index = 1.0
 
@@ -42,15 +41,15 @@ world.objects << air
 
 world.light = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0))
 
-#camera = camera(2500, 1250, Math::PI/3.0) #1.5 hrs +
-camera = camera(200, 200, Math::PI/3.0)
+camera = camera(400, 400, Math::PI/3.0)
+#camera = camera(200, 200, Math::PI/3.0)
 #camera = camera(100, 100, Math::PI/3.0)
 #camera = camera(50, 50, Math::PI/3.0)
 camera.transform = view_transform(point(0.0, 5.25, 0.0),
                                   point(0.0, 0.0, 0.0),
                                   vector(0.0, 0.0, 1.0))
-#camera.transform = view_transform(point(0.0, 0.0, -10.0),
-#                                  point(0.0, 0.0, 0.0),
+#camera.transform = view_transform(point(0.0, 1.0, -8.0),
+#                                  point(0.0, 1.0, 0.0),
 #                                  vector(0.0, 1.0, 0.0))
 puts "Rendering..."
 canvas = camera.render(world)
