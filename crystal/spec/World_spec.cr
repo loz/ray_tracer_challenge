@@ -241,4 +241,90 @@ Spectator.describe World do
       end
     end
   end
+
+  describe "Refraction" do
+    let(w) { default_world }
+    let(shape) { w.objects.first }
+    let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+    let(xs) { w.intersect(r) }
+    let(comps) { xs[0].prepare_computations(r, xs) }
+
+
+    describe "with opaque surface" do
+      it "is black with opaque surface" do
+        c = w.refracted_color(comps, 5)
+        expect(c).to eq black
+      end
+    end
+
+    describe "when max recursion reached" do
+      it "is black" do
+        shape.material.transparency = 1.0
+        c = w.refracted_color(comps, 0)
+        expect(c).to eq black
+      end
+    end
+
+    describe "under total internal reflection" do
+      let(r) { ray(point(0.0, 0.0, Math.sqrt(2.0)/2.0), vector(0.0, 1.0, 0.0)) }
+      let(comps) { xs[1].prepare_computations(r, xs) }
+
+      it "is black" do
+        shape.material.transparency = 1.0
+        shape.material.refractive_index = 1.5
+        c = w.refracted_color(comps, 5)
+        expect(c).to eq black
+      end
+    end
+
+    describe "with transparent surface" do
+      let(w) do
+        w = default_world
+        a = w.objects[0]
+        a.material.ambient = 1.0
+        a.material.pattern = test_pattern()
+        b = w.objects[1]
+        b.material.transparency = 1.0
+        b.material.refractive_index = 1.5
+        w
+      end
+      let(r) { ray(point(0.0, 0.0, 0.1), vector(0.0, 1.0, 0.0)) }
+      let(xs) { w.intersect(r) }
+      let(comps) { xs[2].prepare_computations(r, xs) }
+
+      it "has a refracted color" do
+        c = w.refracted_color(comps, 5)
+        expect(c.approximate?(color(0.0, 0.99888, 0.04725))).to be true
+      end
+
+      describe "shade_hit" do
+        let(floor) do
+          floor = plane()
+          floor.transform = translation(0.0, -1.0, 0.0)
+          floor.material.transparency = 0.5
+          floor.material.refractive_index = 1.5
+          floor
+        end
+        let(w) do
+          w = default_world
+          w.objects << floor
+
+          ball = sphere()
+          ball.material.color = red
+          ball.material.ambient = 0.5
+          ball.transform = translation(0.0, -3.5, -0.5)
+          w.objects << ball
+          w
+        end
+        let(r) { ray(point(0.0, 0.0, -3.0), vector(0.0, -Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0)) }
+        let(i) { intersection(Math.sqrt(2.0), floor) }
+        let(comps) { i.prepare_computations(r) }
+
+        it "uses refracted ray" do
+          c = w.shade_hit(comps, 5)
+          expect(c.approximate?(color(0.93642, 0.68642, 0.68642))).to be true
+        end
+      end
+    end
+  end
 end

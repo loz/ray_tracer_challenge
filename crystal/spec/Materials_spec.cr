@@ -119,4 +119,16 @@ Spectator.describe Materials do
       expect(m.reflective).to eq 0.0
     end
   end
+
+  describe "Transparency and Refractive Index" do
+    let(m) { material() }
+
+    it "is not transparent by default" do
+      expect(m.transparency).to eq 0.0
+    end
+
+    it "has index of 1.0 by default (a vacuum)" do
+      expect(m.refractive_index).to eq 1.0
+    end
+  end
 end

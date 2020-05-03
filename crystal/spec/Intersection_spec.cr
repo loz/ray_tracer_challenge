@@ -128,5 +128,70 @@ Spectator.describe Intersection do
         expect(comps.normalv).to eq vector(0.0, 0.0, -1.0)
       end
     end
+
+    describe "for refraction and transparency" do
+      let(a) do
+        s = glass_sphere()
+        s.transform = scaling(2.0, 2.0, 2.0)
+        s.material.refractive_index = 1.5
+        s
+      end
+      let(b) do
+        s = glass_sphere()
+        s.transform = translation(0.0, 0.0, -0.25)
+        s.material.refractive_index = 2.0
+        s
+      end
+      let(c) do
+        s = glass_sphere()
+        s.transform = translation(0.0, 0.0, 0.25)
+        s.material.refractive_index = 2.5
+        s
+      end
+      let(r) { ray(point(0.0, 0.0, -4.0), vector(0.0, 0.0, 1.0)) }
+      let(xs) do
+        w = world()
+        w.objects << a
+        w.objects << b
+        w.objects << c
+        w.intersect(r)
+      end
+      let(examples) do
+        [
+          {0, 1.0, 1.5},
+          {1, 1.5, 2.0},
+          {2, 2.0, 2.5},
+          {3, 2.5, 2.5},
+          {4, 2.5, 1.5},
+          {5, 1.5, 1.0}
+        ]
+      end
+
+      it "calculates expected n1, n2 values for each intersection" do
+        examples.each do |example|
+          index, n1, n2 = example
+          i = xs[index]
+          comps = i.prepare_computations(r, xs)
+          expect(comps.n1).to eq n1
+          expect(comps.n2).to eq n2
+        end
+      end
+    end
+
+    describe "the under_point" do
+      let(r) { ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0)) }
+      let(shape) do
+        s = glass_sphere()
+        s.transform = translation(0.0, 0.0, 1.0)
+        s
+      end
+      let(i) { intersection(5.0, shape) }
+
+      it "is just under surface" do
+        comps = i.prepare_computations(r)
+        expect(comps.under_point.z).to be_gt EPSILON/2.0
+        expect(comps.point.z).to be_lt comps.under_point.z
+      end
+    end
   end
 end

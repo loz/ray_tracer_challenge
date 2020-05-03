@@ -2,6 +2,13 @@ def sphere()
   Sphere.new()
 end
 
+def glass_sphere()
+  s = Sphere.new()
+  s.material.transparency = 1.0
+  s.material.refractive_index = 1.5
+  s
+end
+
 class Sphere < Shape
 
   def implement_intersect(tray)

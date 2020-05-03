@@ -10,7 +10,7 @@ module Materials
   class Base
     property color : RTuple
     property pattern : Pattern | Nil
-    property ambient, diffuse, specular, shininess, reflective
+    property ambient, diffuse, specular, shininess, reflective, transparency, refractive_index
 
     def initialize()
       @color = color(1.0, 1.0, 1.0)
@@ -19,6 +19,8 @@ module Materials
       @specular = 0.9
       @shininess = 200.0
       @reflective = 0.0
+      @transparency = 0.0
+      @refractive_index = 1.0
     end
 
     def ==(other)
@@ -26,7 +28,10 @@ module Materials
       @ambient == other.ambient &&
       @diffuse == other.diffuse &&
       @specular == other.specular &&
-      @shininess == other.shininess
+      @shininess == other.shininess &&
+      @reflective == other.reflective &&
+      @transparency == other.transparency &&
+      @refractive_index == other.refractive_index
     end
 
     def lighting(object, light, position, eyev, normalv, in_shadow = false)
@@ -49,16 +54,16 @@ module Materials
       else
         e_diffuse = effective_color * diffuse * light_dot_normal 
 
-	#Refect represigns angle of reflect + eye
-	reflectv = (-lightv).reflect(normalv)
-	reflect_dot_eye = reflectv.dot(eyev)
+	      #Refect represigns angle of reflect + eye
+	      reflectv = (-lightv).reflect(normalv)
+	      reflect_dot_eye = reflectv.dot(eyev)
 
-	if reflect_dot_eye <= 0.0
-	  e_specular = black
-	else
-	  factor = reflect_dot_eye ** shininess
-	  e_specular = light.intensity * specular * factor
-	end
+	      if reflect_dot_eye <= 0.0
+	        e_specular = black
+	      else
+	        factor = reflect_dot_eye ** shininess
+	        e_specular = light.intensity * specular * factor
+	      end
       end
 
       return color(e_ambient + e_diffuse + e_specular)

@@ -28,12 +28,22 @@ struct Intersections
     end
   end
 
+  def empty?
+    @set.empty?
+  end
+
   def size
     @set.size
   end
 
   def <<(i)
     @set << i
+  end
+  
+  def each
+    @set.each do |i|
+      yield i
+    end
   end
 
   def [](idx)
@@ -61,7 +71,8 @@ class Intersection
     false
   end
 
-  def prepare_computations(ray)
+  def prepare_computations(ray, xs = Intersections.new)
+    xs << self if xs.empty?
     point = ray.position(t)
     normalv = object.normal_at(point)
     eyev = -ray.direction
@@ -69,33 +80,68 @@ class Intersection
     if normalv.dot(eyev) < 0
       normalv = -normalv
       inside = true
-      over_point = point + normalv * EPSILON
     else
       inside = false
-      over_point = point + normalv * EPSILON
     end
+    over_point = point + normalv * EPSILON
+    under_point = point - normalv * EPSILON
 
     reflectv = ray.direction.reflect(normalv)
 
-    Computations.new t,
+    comps = Computations.new t,
       object,
       point,
       eyev,
       normalv,
       inside,
       over_point,
-      reflectv
+      reflectv,
+      under_point
+
+    comps.calculate_n1_n2(xs, self)
+    comps
   end
 end
 
 struct Intersection::Computations
-  getter t, object, point, eyev, normalv, over_point, reflectv
+  getter t, object, point, eyev, normalv, over_point, reflectv, n1, n2, under_point
 
-  def initialize(@t : Float64, @object : Shape, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point, @reflectv : Vector)
+  def initialize(@t : Float64, @object : Shape, @point : Point,  @eyev : Vector, @normalv : Vector, @inside : Bool, @over_point : Point, @reflectv : Vector, @under_point : Point)
+    @n1 = 0.0
+    @n2 = 0.0
   end
 
   def inside?
     @inside
+  end
+
+  def calculate_n1_n2(xs, hit)
+    containers = [] of Shape
+    xs.each do |i|
+      if i == hit
+        if containers.empty?
+          @n1 = 1.0
+        else
+          @n1 = containers.last.material.refractive_index
+        end
+      end
+
+      if containers.includes? i.object
+        containers.delete i.object
+      else 
+        containers << i.object
+      end
+
+      if i == hit
+        if containers.empty?
+          @n2 = 1.0
+        else
+          @n2 = containers.last.material.refractive_index
+        end
+
+        return
+     end
+    end
   end
 end
 

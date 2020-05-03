@@ -193,5 +193,21 @@ Spectator.describe Sphere do
       s.material = m
       expect(s.material).to eq m
     end
+
+    describe "A glassy sphere" do
+      let(s) { glass_sphere() }
+
+      it "has default transform" do
+        expect(s.transform).to eq identity_matrix
+      end
+
+      it "has full transparency" do
+        expect(s.material.transparency).to eq 1.0
+      end
+
+      it "refractive index is 1.5 (glass)" do
+        expect(s.material.refractive_index).to eq 1.5
+      end
+    end
   end
 end

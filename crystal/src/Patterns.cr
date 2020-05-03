@@ -55,6 +55,17 @@ def checks_pattern(a, b)
   Checks.new(a, b)
 end
 
+def test_pattern()
+  TestPattern.new(white, white)
+end
+
+
+class TestPattern < Pattern
+  def at(point)
+    color(point.x, point.y, point.z)
+  end
+end
+
 class Stripe < Pattern
 
   def at(point)
