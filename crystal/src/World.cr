@@ -54,10 +54,18 @@ class World
       black
     else
       shadow = is_shadowed?(comps.over_point)
-      surface = comps.object.material.lighting(comps.object, light, comps.point, comps.eyev, comps.normalv, shadow)
+      material = comps.object.material
+      surface = material.lighting(comps.object, light, comps.point, comps.eyev, comps.normalv, shadow)
       reflected = reflected_color(comps, recursion)
       refracted = refracted_color(comps, recursion)
-      surface + reflected + refracted
+
+      if material.reflective > 0.0 && material.transparency > 0.0
+        reflectance = comps.schlick()
+        return surface + (reflected * reflectance) +
+                         (refracted * (1 - reflectance))
+      else
+        surface + reflected + refracted
+      end
     end
   end
 

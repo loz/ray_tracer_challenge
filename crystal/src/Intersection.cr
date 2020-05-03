@@ -115,6 +115,22 @@ struct Intersection::Computations
     @inside
   end
 
+  def schlick()
+    cos = @eyev.dot @normalv
+
+    if @n1 > @n2
+      n = @n1 / @n2
+      sin2_t = n**2 * (1.0 - cos**2)
+      return 1.0 if sin2_t > 1.0
+
+      cos_t = Math.sqrt(1.0 - sin2_t)
+      cos = cos_t
+    end
+
+    r0 = ((@n1 - @n2) / (@n1 + @n2))**2
+    return r0 + (1 - r0) * (1 - cos)**5
+  end
+
   def calculate_n1_n2(xs, hit)
     containers = [] of Shape
     xs.each do |i|

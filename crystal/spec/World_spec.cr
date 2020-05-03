@@ -277,6 +277,39 @@ Spectator.describe World do
       end
     end
 
+    describe "with transparent and reflective material" do
+      let(r) { ray(point(0.0, 0.0, -3.0), vector(0.0, -Math.sqrt(2.0)/2.0, Math.sqrt(2.0)/2.0)) }
+      let(floor) do
+        f = plane()
+        f.transform = translation(0.0, -1.0, 0.0)
+        f.material.reflective = 0.5
+        f.material.transparency = 0.5
+        f.material.refractive_index = 1.5
+        f
+      end
+      let(ball) do
+        b = sphere()
+        b.material.color = red
+        b.material.ambient = 0.5
+        b.transform = translation(0.0, -3.5, -0.5)
+        b
+      end
+      let(w) do
+        w = default_world
+        w.objects << floor
+        w.objects << ball
+        w
+      end
+      let(xs) { w.intersect(r) }
+      let(i) { xs[0] }
+      let(comps) { i.prepare_computations(r, xs) }
+
+      it "calculates reflection into color" do
+        c = w.shade_hit(comps, 5)
+        expect(c.approximate?(color(0.93391, 0.69643, 0.69243))).to be true
+      end
+    end
+
     describe "with transparent surface" do
       let(w) do
         w = default_world

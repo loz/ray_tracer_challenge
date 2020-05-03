@@ -194,4 +194,43 @@ Spectator.describe Intersection do
       end
     end
   end
+
+  describe "The Schlick approximation" do
+    let(shape) { glass_sphere }
+    let(w) do
+      w = world
+      w.objects << shape
+      w
+    end
+    let(xs) { w.intersect(r) }
+    let(i) { xs[1] }
+    let(comps) { i.prepare_computations(r, xs) }
+    let(reflectance) { comps.schlick() }
+
+    describe "under total reflection" do
+      let(r) { ray(point(0.0, 0.0, Math.sqrt(2.0)/2.0), vector(0.0, 1.0, 0.0)) }
+
+      it "reflects totally" do
+        expect(reflectance).to eq 1.0
+      end
+    end
+
+    describe "with perpendicular viewing angle" do
+      let(r) { ray(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0)) }
+
+      it "reflects bearly" do
+        expect(reflectance).to be_close(0.04, EPSILON)
+      end
+    end
+
+    describe "when small angle and n2 > n1" do
+      let(i) { xs[0] }
+      let(r) { ray(point(0.0, 0.99, -2.0), vector(0.0, 0.0, 1.0)) }
+
+      it "reflects partially" do
+        expect(reflectance).to be_close(0.48873, EPSILON)
+      end
+    end
+
+  end
 end

@@ -23,6 +23,7 @@ glass.material = material()
 glass.material.color = color(0.1, 0.1, 0.1)
 glass.material.diffuse = 0.7
 glass.material.specular = 0.3
+glass.material.reflective = 0.5
 glass.material.transparency = 0.8
 glass.material.refractive_index = 1.5
 
@@ -33,6 +34,7 @@ air.material = material()
 air.material.color = black
 air.material.transparency = 1.0
 air.material.refractive_index = 1.0
+air.material.reflective = 1.0
 
 world = world()
 world.objects << floor
