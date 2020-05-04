@@ -10,6 +10,7 @@ require "./Patterns"
 require "./Shape"
 require "./Sphere"
 require "./Plane"
+require "./Cube"
 require "./World"
 require "./Camera"
 
