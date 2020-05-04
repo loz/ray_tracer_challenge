@@ -11,12 +11,14 @@ pattern.transform = rotation_y(Math::PI/4.0)
 floor.material.pattern = pattern
 
 middle = sphere()
-middle.transform = translation(0.0, 0.5, 1.0) *
-                  scaling(0.5, 0.5, 0.5)
+middle.transform = translation(-1.0, 1.0, 4.0)
 middle.material = material()
 middle.material.color = color(0.1, 1.0, 0.1)
 middle.material.diffuse = 0.7
 middle.material.specular = 0.3
+pattern = stripe_pattern(green, white)
+pattern.transform = scaling(0.5, 0.5, 0.5)
+middle.material.pattern = pattern
 
 glass = sphere()
 glass.transform = translation(-0.5, 1.0, 0.5)
@@ -62,8 +64,9 @@ world.objects << left
 world.light = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0))
 
 #camera = camera(2500, 1250, Math::PI/3.0) #1.5 hrs +
-camera = camera(500, 250, Math::PI/3.0)
+#camera = camera(500, 250, Math::PI/3.0)
 #camera = camera(100, 50, Math::PI/3.0)
+camera = camera(200, 100, Math::PI/3.0)
 camera.transform = view_transform(point(0.0, 1.5, -5.0),
                                   point(0.0, 1.0, 0.0),
                                   vector(0.0, 1.0, 0.0))
