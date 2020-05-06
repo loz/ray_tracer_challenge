@@ -11,6 +11,7 @@ require "./Shape"
 require "./Sphere"
 require "./Plane"
 require "./Cube"
+require "./Cylinder"
 require "./World"
 require "./Camera"
 
