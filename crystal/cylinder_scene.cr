@@ -11,7 +11,9 @@ pattern.transform = rotation_y(Math::PI/4.0)
 floor.material.pattern = pattern
 
 middle = cylinder()
-middle.transform = translation(-0.5, 1.0, 0.5)
+middle.minimum = 0.0
+middle.maximum = 1.0
+middle.transform = translation(-0.5, 0.0, 0.5)
 middle.material = material()
 middle.material.color = color(0.1, 1.0, 0.1)
 middle.material.diffuse = 0.7

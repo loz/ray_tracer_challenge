@@ -5,6 +5,15 @@ end
 class Cylinder < Shape
   EPSILON = 0.00001
 
+  property minimum, maximum : Float64
+
+  def initialize()
+    super
+    @minimum = Float64::INFINITY
+    @minimum *= -1.0
+    @maximum = Float64::INFINITY
+  end
+
   def implement_intersect(ray)
     result = Intersections.new
     a = ray.direction.x**2 + ray.direction.z**2
@@ -23,8 +32,17 @@ class Cylinder < Shape
     t0 = (-b - Math.sqrt(disc)) / (2 * a)
     t1 = (-b + Math.sqrt(disc)) / (2 * a)
 
-    result << intersection(t0, self)
-    result << intersection(t1, self)
+    if t0 > t1
+      tmp = t1
+      t1 = t0
+      t0 = tmp
+    end
+
+    y0 = ray.origin.y + t0 * ray.direction.y
+    y1 = ray.origin.y + t1 * ray.direction.y
+
+    result << intersection(t0, self) if minimum < y0 && y0 < maximum
+    result << intersection(t1, self) if minimum < y1 && y1 < maximum
 
     result
   end

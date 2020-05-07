@@ -57,4 +57,39 @@ Spectator.describe Cylinder do
       end
     end
   end
+
+  describe "Constraints" do
+    let(cyl) { cylinder() }
+    it "has inifinte size by default" do
+      expect(cyl.minimum).to eq -Float64::INFINITY
+      expect(cyl.maximum).to eq Float64::INFINITY
+    end
+
+    describe "intersecting with" do
+      let(cyl) do
+        c = cylinder
+        c.minimum = 1.0
+        c.maximum = 2.0
+        c
+      end
+
+      let(examples) { [
+        {point( 0.0, 1.5, 0.0), vector( 0.1, 1.0, 0.0), 0},
+        {point( 0.0, 3.0,-5.0), vector( 0.0, 0.0, 1.0), 0},
+        {point( 0.0, 0.0,-5.0), vector( 0.0, 0.0, 1.0), 0},
+        {point( 0.0, 2.0,-5.0), vector( 0.0, 0.0, 1.0), 0},
+        {point( 0.0, 1.0,-5.0), vector( 0.0, 0.0, 1.0), 0},
+        {point( 0.0, 1.5,-2.0), vector( 0.0, 0.0, 1.0), 2}
+      ] }
+
+      it "only intersects within the constraints" do
+        examples.each do |example|
+          point, direction, count = example
+          r = ray(point, direction)
+          xs = cyl.intersect(r)
+          expect(xs.size).to eq count
+        end
+      end
+    end
+  end
 end
