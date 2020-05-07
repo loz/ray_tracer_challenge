@@ -1,37 +1,32 @@
-def cylinder
-  Cylinder.new
+def cone
+  Cone.new
 end
 
-class Cylinder < Shape
-  EPSILON = 0.00001
 
-  property minimum, maximum : Float64
-  property closed
-
-  def initialize()
-    super
-    @minimum = Float64::INFINITY
-    @minimum *= -1.0
-    @maximum = Float64::INFINITY
-    @closed = false
-  end
+class Cone < Cylinder
 
   def implement_intersect(ray)
     result = Intersections.new
-    a = ray.direction.x**2 + ray.direction.z**2
+    a = ray.direction.x**2 - ray.direction.y**2 + ray.direction.z**2
 
-    if a < Float64::EPSILON
-      intersect_caps(ray, result)
-      return result 
-    end
 
-    b = (2.0 * ray.origin.x * ray.direction.x) +
+    b = (2.0 * ray.origin.x * ray.direction.x) -
+        (2.0 * ray.origin.y * ray.direction.y) +
         (2.0 * ray.origin.z * ray.direction.z)
 
-    c = ray.origin.x**2 + ray.origin.z**2 - 1.0
+    c = ray.origin.x**2 -
+        ray.origin.y**2 +
+	ray.origin.z**2
+
+    if a == 0.0 && b != 0.0
+      t = -c / (2*b)
+      result << intersection(t, self)
+      intersect_caps(ray, result)
+      return result
+    end
 
     disc = b**2 - (4.0 * a * c)
-
+    
     return result if disc < 0.0
 
     t0 = (-b - Math.sqrt(disc)) / (2 * a)
@@ -55,21 +50,7 @@ class Cylinder < Shape
   def check_cap(ray, t, radius)
     x = ray.origin.x + t * ray.direction.x
     z = ray.origin.z + t * ray.direction.z
-    x**2 + z**2 <= 1.0
-  end
-
-  def intersect_caps(ray, result)
-    return unless @closed
-    #Lower Cap
-    t = (minimum - ray.origin.y) / ray.direction.y
-    if check_cap(ray, t, minimum)
-      result << intersection(t, self)
-    end
-    #Upper Cap
-    t = (maximum - ray.origin.y) / ray.direction.y
-    if check_cap(ray, t, maximum)
-      result << intersection(t, self)
-    end
+    x**2 + z**2 <= radius.abs
   end
 
   def implement_normal_at(point)
@@ -79,6 +60,10 @@ class Cylinder < Shape
       return vector(0.0, -1.0, 0.0) if point.y <= minimum + Float64::EPSILON
     end
 
-    vector(point.x, 0.0, point.z)
+    y = Math.sqrt(dist)
+    y = -y if point.y > 0.0
+
+    vector(point.x, y, point.z)
   end
+
 end

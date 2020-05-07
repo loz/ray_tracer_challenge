@@ -14,7 +14,7 @@ middle = cylinder()
 middle.minimum = 0.0
 middle.maximum = 1.0
 middle.closed = true
-middle.transform = translation(-0.5, 0.0, 0.5) *
+middle.transform = translation(-0.5, 0.5, 0.5) *
                    rotation_x(-Math::PI/8.0)
 middle.material = material()
 middle.material.color = color(0.1, 1.0, 0.1)
@@ -25,10 +25,13 @@ pattern.transform = rotation_y(Math::PI/8.0) *
                     scaling(0.1, 0.1, 0.1)
 middle.material.pattern = pattern
 
-right = sphere()
-right.transform = translation(2.0, 0.5, -0.5) *
-                  scaling(0.5, 0.5, 0.5) *
-		  rotation_z(Math::PI/4.0)
+right = cone()
+right.minimum = 0.0
+right.maximum = 1.0
+right.closed = true
+right.transform = translation(2.0, 0.5, 0.0) *
+                  scaling(0.5, 1.0, 0.5)
+#		  rotation_z(Math::PI/4.0)
 right.material = material()
 right.material.color = color(0.1, 0.1, 1.0)
 right.material.diffuse = 0.7
@@ -37,9 +40,12 @@ pattern = stripe_pattern(color(0.1, 0.1, 1.0), color(0.5, 0.5, 1.0))
 pattern.transform = scaling(0.5, 0.5, 0.5)
 right.material.pattern = pattern
 
-left = sphere()
-left.transform = translation(-2.0, 0.33, -0.75) *
-                  scaling(0.33, 0.33, 0.33)
+left = cone()
+left.minimum = -1.0
+left.maximum = 0.0
+left.closed = true
+left.transform = translation(-2.0, 1.1, -0.5) *
+                  scaling(0.33, 1.0, 0.33)
 left.material = material()
 left.material.color = color(1.0, 0.1, 0.1)
 left.material.diffuse = 0.7
