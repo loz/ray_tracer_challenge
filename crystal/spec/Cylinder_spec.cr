@@ -92,4 +92,65 @@ Spectator.describe Cylinder do
       end
     end
   end
+
+  describe "Capping" do
+    let(cyl) { cylinder }
+    it "is open by default" do
+      expect(cyl.closed).to be false
+    end
+
+    describe "intersecting with closed cylinder" do
+      let(cyl) do
+        c = cylinder
+        c.minimum = 1.0
+        c.maximum = 2.0
+	c.closed = true
+        c
+      end
+
+      let(examples) { [
+        {point( 0.0, 3.0, 0.0), vector( 0.0,-1.0, 0.0), 2},
+        {point( 0.0, 3.0,-2.0), vector( 0.0,-1.0, 2.0), 2}, 
+        {point( 0.0, 4.0,-2.0), vector( 0.0,-1.0, 1.0), 2}, #Corner
+        {point( 0.0, 0.0,-2.0), vector( 0.0, 1.0, 2.0), 2},
+        {point( 0.0,-1.0,-2.0), vector( 0.0, 1.0, 1.0), 2}, #Corner
+      ] }
+
+      it "intersects with cap, including on corners" do
+        examples.each do |example|
+          point, direction, count = example
+          r = ray(point, direction)
+          xs = cyl.intersect(r)
+          expect(xs.size).to eq count
+        end
+      end
+    end
+
+    describe "normals on a cylinder cap" do
+      let(cyl) do
+      	c = cylinder()
+	c.minimum = 1.0
+	c.maximum = 2.0
+	c.closed = true
+	c
+      end
+      let(examples) { [
+        {point( 0.0, 1.0, 0.0), vector( 0.0,-1.0, 0.0)},
+        {point( 0.5, 1.0, 0.0), vector( 0.0,-1.0, 0.0)},
+        {point( 0.0, 1.0, 0.5), vector( 0.0,-1.0, 0.0)},
+        {point( 0.0, 2.0, 0.0), vector( 0.0, 1.0, 0.0)},
+        {point( 0.5, 2.0, 0.0), vector( 0.0, 1.0, 0.0)},
+        {point( 0.0, 2.0, 0.5), vector( 0.0, 1.0, 0.0)}
+      ] }
+
+      it "is vertical +/- for top and bottom caps" do
+        examples.each do |example|
+          point, normal = example
+          n = cyl.normal_at(point)
+          expect(n).to eq normal
+        end
+      end
+    end
+
+  end
 end
