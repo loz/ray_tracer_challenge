@@ -19,4 +19,9 @@ class Plane < Shape
     end
     result
   end
+
+  def bounds
+    Bounds.new point(-Float64::INFINITY,0.0,-Float64::INFINITY),
+               point( Float64::INFINITY,0.0, Float64::INFINITY)
+  end
 end

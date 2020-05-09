@@ -21,6 +21,29 @@ Spectator.describe Cone do
     end
   end
 
+  describe "Bounds" do
+    let(shape) { cone() }
+
+    it "is infinte in all directions" do
+      bounds = shape.bounds
+      expect(bounds.min).to eq point(-Float64::INFINITY,-Float64::INFINITY,-Float64::INFINITY)
+      expect(bounds.max).to eq point( Float64::INFINITY, Float64::INFINITY, Float64::INFINITY)
+    end
+
+    describe "When constrained" do
+      before_each do
+        shape.minimum = -3.0
+        shape.maximum =  4.5
+      end
+
+      it "is bounds within constraints, with x,z based on largest diameter" do
+        bounds = shape.bounds
+        expect(bounds.min).to eq point(-4.5, -3.0,-4.5)
+        expect(bounds.max).to eq point( 4.5,  4.5, 4.5)
+      end
+    end
+  end
+
   describe "intersecting with a ray parallel to one half" do
     let(shape) { cone }
     let(r) { ray(point(0.0, 0.0, -1.0), vector(0.0, 1.0, 1.0).normalize) }

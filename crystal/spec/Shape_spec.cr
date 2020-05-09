@@ -46,6 +46,16 @@ Spectator.describe Shape do
       end
     end
   end
+  
+  describe "Bounds" do
+    let(s) { test_shape() }
+
+    it "has bounds of 1 unit in each direction" do
+      bounds = s.bounds
+      expect(bounds.min).to eq point(-1.0,-1.0,-1.0)
+      expect(bounds.max).to eq point( 1.0, 1.0, 1.0) 
+    end
+  end
 
   describe "Materials" do
     it "has default material" do

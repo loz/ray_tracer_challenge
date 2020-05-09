@@ -1,4 +1,10 @@
-class Shape 
+class Shape
+  struct Bounds
+    property min, max : Point
+    def initialize(@min : Point, @max : Point); end
+  end
+
+
   property transform : Matrix::Base
   property material : Materials::Base
   property parent : Shape
@@ -12,6 +18,11 @@ class Shape
   def ==(other)
     @transform == other.transform &&
     @material == other.material
+  end
+
+  def bounds
+    Bounds.new point(-1.0,-1.0,-1.0),
+               point( 1.0, 1.0, 1.0)
   end
 
   def intersect(ray)

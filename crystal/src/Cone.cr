@@ -66,4 +66,11 @@ class Cone < Cylinder
     vector(point.x, y, point.z)
   end
 
+  def bounds
+    largest = {minimum.abs, maximum.abs}.max
+
+    Bounds.new point(-largest, minimum,-largest),
+               point( largest, maximum, largest)
+  end
+
 end

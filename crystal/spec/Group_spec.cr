@@ -72,4 +72,40 @@ Spectator.describe Group do
     end
   end
 
+  describe "Bounds" do
+    let(g) { group() }
+    let(s1) { cube() }
+    let(s2) { cube() }
+
+    before_each do
+      s1.transform = translation(-11.0,-10.0,-13.0)
+      s2.transform = translation( 15.0, 12.0, 18.0)
+      g << s1
+      g << s2
+    end
+
+    it "surounds objects within group, including translations" do
+      bounds = g.bounds
+      expect(bounds.min).to eq point(-12.0,-11.0,-14.0)
+      expect(bounds.max).to eq point( 16.0, 13.0, 19.0)
+    end
+
+    describe "when rotations cause bounding box to widen" do
+      before_each do
+        s1.transform = s1.transform *
+                       rotation_z(Math::PI/4.0)
+        s2.transform = s2.transform *
+                       rotation_x(Math::PI/4.0)
+        g.calc_bounds!
+      end
+
+      it "accounts for all 8 corners in the group" do
+        bounds = g.bounds
+        rt2 = Math.sqrt(2.0)
+        expect(bounds.min).to eq point(-11.0-rt2,-10.0-rt2,-14.0)
+        expect(bounds.max).to eq point( 16.0,     12.0+rt2, 18.0+rt2)
+      end
+    end
+  end
+
 end

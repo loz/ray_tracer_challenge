@@ -1,8 +1,9 @@
 require "./spec_helper"
 
 Spectator.describe Cylinder do
+  let(cyl) { cylinder() }
+
   describe "a ray misses a cylinder" do
-    let(cyl) { cylinder() }
     let(examples) { [
       {point( 1.0, 0.0, 0.0), vector( 0.0, 1.0, 0.0)},
       {point( 0.0, 0.0, 0.0), vector( 0.0, 1.0, 0.0)},
@@ -12,9 +13,30 @@ Spectator.describe Cylinder do
     it "does not intersect on examples" do
       examples.each do |example|
         origin, direction = example
-	r = ray(origin, direction)
-	xs = cyl.intersect(r)
-	expect(xs.size).to eq 0
+	      r = ray(origin, direction)
+	      xs = cyl.intersect(r)
+	      expect(xs.size).to eq 0
+      end
+    end
+  end
+
+  describe "Bounds" do
+    it "is infinte in y" do
+      bounds = cyl.bounds
+      expect(bounds.min).to eq point(-1.0, -Float64::INFINITY,-1.0)
+      expect(bounds.max).to eq point( 1.0,  Float64::INFINITY, 1.0)
+    end
+
+    describe "When constrained" do
+      before_each do
+        cyl.minimum = -3.0
+        cyl.maximum =  4.5
+      end
+
+      it "is bounds within constraints" do
+        bounds = cyl.bounds
+        expect(bounds.min).to eq point(-1.0, -3.0,-1.0)
+        expect(bounds.max).to eq point( 1.0,  4.5, 1.0)
       end
     end
   end

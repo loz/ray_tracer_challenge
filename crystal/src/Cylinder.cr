@@ -81,4 +81,9 @@ class Cylinder < Shape
 
     vector(point.x, 0.0, point.z)
   end
+
+  def bounds
+    Bounds.new point(-1.0, minimum,-1.0),
+               point( 1.0, maximum, 1.0)
+  end
 end

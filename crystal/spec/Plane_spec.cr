@@ -10,6 +10,14 @@ Spectator.describe Plane do
     end
   end
 
+  describe "Bounds" do
+    it "is infinte in x and z, with no y" do
+      bounds = p.bounds
+      expect(bounds.min).to eq point(-Float64::INFINITY,0.0,-Float64::INFINITY)
+      expect(bounds.max).to eq point( Float64::INFINITY,0.0, Float64::INFINITY)
+    end
+  end
+
   describe "Intersecting" do
     let(xs) { p.intersect(r) }
 
