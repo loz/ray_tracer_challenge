@@ -1,10 +1,12 @@
 class Shape 
   property transform : Matrix::Base
   property material : Materials::Base
+  property parent : Shape
 
   def initialize()
     @transform = identity_matrix
     @material = Materials.material()
+    @parent = NoShape.new
   end
 
   def ==(other)
@@ -17,17 +19,37 @@ class Shape
     implement_intersect(tray)
   end
 
+  def world_to_object_space(point)
+    unless parent.none?
+      point = parent.world_to_object_space(point)
+    end
+    transform.inverse * point
+  end
+
+  def normal_to_world(normal)
+    normal = transform.inverse.transpose * normal
+    normal.fix_vector_w!
+    normal = normal.normalize
+
+    unless parent.none?
+      normal = parent.normal_to_world(normal)
+    end
+
+    normal
+  end
+
   def implement_intersect(ray)
     raise "NotImplemented"
   end
 
-  def normal_at(p)
-    object_point = transform.inverse * p
-    object_normal = implement_normal_at(object_point)
+  def none?
+    false
+  end
 
-    world_normal = transform.inverse.transpose * object_normal
-    world_normal.fix_vector_w!
-    return world_normal.normalize
+  def normal_at(p)
+    local_point = world_to_object_space(p)
+    local_normal = implement_normal_at(local_point)
+    normal_to_world(local_normal)
   end
 
   def implement_normal_at(point)
@@ -35,3 +57,14 @@ class Shape
   end
 end
 
+class NoShape < Shape
+  def initialize
+    @transform = identity_matrix
+    @material = Materials.material()
+    @parent = self
+  end
+
+  def none?
+    true
+  end
+end
