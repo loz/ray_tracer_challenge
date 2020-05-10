@@ -14,6 +14,7 @@ require "./Plane"
 require "./Cube"
 require "./Cylinder"
 require "./Cone"
+require "./Triangle"
 require "./World"
 require "./Camera"
 
