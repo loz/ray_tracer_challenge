@@ -4,6 +4,8 @@ end
 
 class Group < Shape
 
+  getter children
+
   def initialize
     super
     @children = [] of Shape
@@ -12,6 +14,11 @@ class Group < Shape
 
   def empty?
     @children.empty?
+  end
+
+  #Groups are not comparible unless same object
+  def ==(other)
+    other.object_id == object_id
   end
 
   def <<(child)

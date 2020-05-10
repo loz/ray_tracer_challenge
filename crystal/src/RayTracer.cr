@@ -17,6 +17,7 @@ require "./Cone"
 require "./Triangle"
 require "./World"
 require "./Camera"
+require "./ObjFile"
 
 module RayTracer
   VERSION = "0.1.0"
