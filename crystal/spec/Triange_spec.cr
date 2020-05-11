@@ -23,6 +23,16 @@ Spectator.describe Triangle do
     end
   end
 
+  describe "Bounds" do
+    let(t) { triangle(point(-1.3, 1.0, 13.5), point(-8.0, -3.4, -4.0), point(1.0, 3.0, 2.4)) }
+
+    it "is the extreme of points" do
+      bounds = t.bounds
+      expect(bounds.min).to eq point(-8.0, -3.4, -4.0)
+      expect(bounds.max).to eq point( 1.0,  3.0, 13.5)
+    end
+  end
+
   describe "Finding the normal" do
     let(t) { triangle(point(0.0, 1.0, 0.0), point(-1.0, 0.0, 0.0), point(1.0, 0.0, 0.0)) }
     let(n1) { t.normal_at(point( 0.0, 0.5 , 0.0)) }

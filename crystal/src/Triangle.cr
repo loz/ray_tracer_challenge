@@ -14,6 +14,14 @@ class Triangle < Shape
     @normal = @e2.cross(@e1).normalize
   end
 
+  def bounds
+    xs = [@p1.x, @p2.x, @p3.x]
+    ys = [@p1.y, @p2.y, @p3.y]
+    zs = [@p1.z, @p2.z, @p3.z]
+    Bounds.new point(xs.min, ys.min, zs.min),
+               point(xs.max, ys.max, zs.max)
+  end
+
   def implement_normal_at(point)
     normal
   end
