@@ -17,7 +17,7 @@ class Camera
     @pixel_size = calc_pixel_size
   end
 
-  def render(world)
+  def render(world, progress = false)
     #channel = Channel(Int32).new
 
     image = Canvas.new(hsize, vsize)
@@ -30,7 +30,12 @@ class Camera
         end
 	#channel.send y
       #end
+      if progress
+        perc = y / (vsize * 1.0)
+	print "\r\e[K #{perc * 100.0} %"
+      end
     end
+    puts "\r\e[K 100.0%" if progress
     #(0...vsize).each do
     #  channel.receive
     #  putc "."
