@@ -60,7 +60,8 @@ struct Canvas
     if row.size <= (70-4) 
        row += " "
     else 
-       str += row + "\n"
+       str << row
+       str << "\n"
        row = ""
     end
     {row, str}
@@ -73,24 +74,25 @@ struct Canvas
   end
 
   def to_ppm
-     str = "" +
-     	   "P3\n" +
-	   "#{@width} #{@height}\n" +
-	   "255\n"
-     @height.times do |h|
-     	row = ""
-	@width.times do |w|
-	  color = pixel_at(w, h)
-	  r = clamp(color.red * 255.0, 0, 255)
-	  row, str = string_component(r, row, str)
-	  g = clamp(color.green * 255.0, 0, 255)
-	  row, str = string_component(g, row, str)
-	  b = clamp(color.blue * 255.0, 0, 255)
-	  row, str = string_component(b, row, str)
-	end
-	str += row.chomp(" ") + "\n"
-     end
-     str + "\n"
+     String.build do |str|
+       str << "P3\n"
+       str << "#{@width} #{@height}\n"
+       str << "255\n"
+       @height.times do |h|
+       	row = ""
+          @width.times do |w|
+            color = pixel_at(w, h)
+            r = clamp(color.red * 255.0, 0, 255)
+            row, str = string_component(r, row, str)
+            g = clamp(color.green * 255.0, 0, 255)
+            row, str = string_component(g, row, str)
+            b = clamp(color.blue * 255.0, 0, 255)
+            row, str = string_component(b, row, str)
+          end
+          str <<  row.chomp(" ") + "\n"
+       end
+       str << "\n"
+     end.to_s
   end
 end
 
