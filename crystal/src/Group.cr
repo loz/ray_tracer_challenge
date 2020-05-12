@@ -9,7 +9,7 @@ class Group < Shape
   def initialize
     super
     @children = [] of Shape
-    @bounds = Bounds.new(point(0.0, 0.0, 0.0), point(0.0, 0.0, 0.0))
+    @bounds = nil
   end
 
   def empty?
@@ -24,8 +24,6 @@ class Group < Shape
   def <<(child)
     child.parent = self
     @children << child
-    calc_bounds!
-
   end
 
   def implement_intersect(ray)
@@ -38,9 +36,9 @@ class Group < Shape
   end
 
   def intersect_bbox?(ray)
-    xtmin, xtmax = check_axis(ray.origin.x, ray.direction.x, @bounds.min.x, @bounds.max.x)
-    ytmin, ytmax = check_axis(ray.origin.y, ray.direction.y, @bounds.min.y, @bounds.max.y)
-    ztmin, ztmax = check_axis(ray.origin.z, ray.direction.z, @bounds.min.z, @bounds.max.z)
+    xtmin, xtmax = check_axis(ray.origin.x, ray.direction.x, bounds.min.x, bounds.max.x)
+    ytmin, ytmax = check_axis(ray.origin.y, ray.direction.y, bounds.min.y, bounds.max.y)
+    ztmin, ztmax = check_axis(ray.origin.z, ray.direction.z, bounds.min.z, bounds.max.z)
     tmin = {xtmin, ytmin, ztmin}.max
     tmax = {xtmax, ytmax, ztmax}.min
     return false if tmin > tmax
@@ -67,13 +65,18 @@ class Group < Shape
   end
 
   def bounds
-    @bounds
+    calc_bounds! unless @bounds
+    @bounds.as(Bounds)
   end
 
   def calc_bounds!
     xs = [] of Float64
     ys = [] of Float64
     zs = [] of Float64
+    if @children.empty?
+      @bounds = Bounds.new point(0.0, 0.0, 0.0), point(0.0, 0.0, 0.0)
+      return
+    end
     @children.each do |child|
       cbounds = child.bounds
       corners = all_corners(cbounds)
