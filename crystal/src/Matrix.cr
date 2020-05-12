@@ -13,10 +13,11 @@ def identity_matrix()
 end
 
 module Matrix
-  struct Base
+  class Base
     getter size : Int32
-
     getter content : Array(Array(Float64))
+
+    @inverse : Nil | Matrix::Base
 
     def initialize(@size : Int32)
       @content = Array.new(@size) { Array.new(@size, 0.0) }
@@ -39,7 +40,12 @@ module Matrix
       determinant != 0.0
     end
 
+    def inverse=(other : Matrix::Base)
+      @inverse = other
+    end
+
     def inverse
+      return @inverse.as(Matrix::Base) if @inverse
       m = Matrix::Base.new(size)
       d = determinant
       size.times do |y|
@@ -47,6 +53,8 @@ module Matrix
 	  m[y,x] = (cofactor(x,y) / d) 
         end
       end
+      m.inverse = self
+      @inverse = m
       m
     end
 
