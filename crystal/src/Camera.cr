@@ -34,20 +34,27 @@ class Camera
       if progress
         elapsed = Time.monotonic - start
         perc = y / (vsize * 1.0)
-	if perc > 0
-	  remain = (elapsed / perc) * (1.0 - perc)
-	  e_min = elapsed.total_minutes.floor.to_i
-	  e_sec = elapsed.seconds
-	  r_min = remain.total_minutes.floor.to_i
-	  r_sec = remain.seconds
-	  estimate = "#{e_min}min #{e_sec}s (est. #{r_min}min #{r_sec} remaining)"
-	else
-	  estimate = ""
-	end
-	print "\r\e[K #{(perc * 100.0).format(decimal_places: 2)}% #{estimate}"
+	      if perc > 0
+	        remain = (elapsed / perc) * (1.0 - perc)
+	        e_min = elapsed.total_minutes.floor.to_i
+	        e_sec = elapsed.seconds
+	        r_min = remain.total_minutes.floor.to_i
+	        r_sec = remain.seconds
+	        estimate = "#{e_min}min #{e_sec}s (est. #{r_min}min #{r_sec} remaining)"
+	      else
+	        estimate = ""
+	      end
+	      print "\r\e[K #{(perc * 100.0).format(decimal_places: 2)}% #{estimate}"
       end
     end
-    puts "\r\e[K 100.0%" if progress
+    if progress
+      puts "\r\e[K 100.0%"
+      elapsed = Time.monotonic - start
+	    e_min = elapsed.total_minutes.floor.to_i
+	    e_sec = elapsed.seconds
+	    puts "#{e_min}min #{e_sec}s render time"
+    end
+
     #(0...vsize).each do
     #  channel.receive
     #  putc "."
