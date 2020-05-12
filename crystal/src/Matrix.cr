@@ -16,6 +16,12 @@ module Matrix
   struct Base
     getter size : Int32
 
+    getter content : Array(Array(Float64))
+
+    def initialize(@size : Int32)
+      @content = Array.new(@size) { Array.new(@size, 0.0) }
+    end
+
     def initialize(tuple)
       size = tuple.size
       @content = Array(Array(Float64)).new
@@ -34,16 +40,14 @@ module Matrix
     end
 
     def inverse
-      m = Array(Array(Float64)).new
+      m = Matrix::Base.new(size)
       d = determinant
       size.times do |y|
-        row = Array(Float64).new
         size.times do |x|
-          row << (cofactor(x,y) / d)
+	  m[y,x] = (cofactor(x,y) / d) 
         end
-        m << row
       end
-      matrix(m)
+      m
     end
 
     def determinant
@@ -71,17 +75,24 @@ module Matrix
     end
 
     def submatrix(remrow, remcol)
-      m = Array(Array(Float64)).new
-      size.times do |y|
-        next if y == remrow
-        row = Array(Float64).new
-        size.times do |x|
-          next if x == remcol
-          row << self[y,x]
-        end
-        m << row
+      m = Matrix::Base.new(size-1)
+      y = 0
+      dy = 0
+      nsize = size-1
+      while dy < nsize
+	y+=1 if y == remrow
+        x = 0
+        dx = 0
+        while dx < nsize
+	  x+=1 if x == remcol
+	  m[dy,dx] = self[y,x]
+	  x+=1
+	  dx+=1
+	end
+	y+=1
+	dy+=1
       end
-      matrix(m)
+      m
     end
 
     def transpose
@@ -111,6 +122,9 @@ module Matrix
 
     def [](x, y)
       @content[y][x]
+    end
+    def []=(x, y, v)
+      @content[y][x] = v
     end
 
     def ==(other)
@@ -149,31 +163,29 @@ module Matrix
     end
 
     def +(other)
-      result = Array(Array(Float64)).new
+      m = Matrix::Base.new(size)
+      d = determinant
       size.times do |y|
-        col = Array(Float64).new
         size.times do |x|
-          col << (other[y,x] + self[y, x])
+	  m[y,x] = (other[y,x] + self[y, x])
         end
-        result << col
       end
-      matrix(result)
+      m
     end
 
     def *(other)
-      result = Array(Array(Float64)).new
-      size.times do |x|
-        col = Array(Float64).new
-        size.times do |y|
+      m = Matrix::Base.new(size)
+      d = determinant
+      size.times do |y|
+        size.times do |x|
           val = 0.0
           size.times do |offset|
              val += (other[offset,y] * self[x, offset])
           end
-          col << val
+	  m[x,y] = val
         end
-        result << col
       end
-      matrix(result)
+      m
     end
   end
 end
