@@ -19,6 +19,7 @@ class Camera
 
   def render(world, progress = false)
     #channel = Channel(Int32).new
+    start = Time.monotonic
 
     image = Canvas.new(hsize, vsize)
     (0...vsize).each do |y|
@@ -31,8 +32,19 @@ class Camera
 	#channel.send y
       #end
       if progress
+        elapsed = Time.monotonic - start
         perc = y / (vsize * 1.0)
-	print "\r\e[K #{perc * 100.0} %"
+	if perc > 0
+	  remain = (elapsed / perc) * (1.0 - perc)
+	  e_min = elapsed.total_minutes.floor.to_i
+	  e_sec = elapsed.seconds
+	  r_min = remain.total_minutes.floor.to_i
+	  r_sec = remain.seconds
+	  estimate = "#{e_min}min #{e_sec}s (est. #{r_min}min #{r_sec} remaining)"
+	else
+	  estimate = ""
+	end
+	print "\r\e[K #{(perc * 100.0).format(decimal_places: 2)}% #{estimate}"
       end
     end
     puts "\r\e[K 100.0%" if progress
