@@ -50,23 +50,25 @@ class ObjFile
   end
 
   def parse_vertex(line)
-    if m = line.match(/^v\s+(?<x>-{0,1}\d+(\.\d+){0,1}) (?<y>-{0,1}\d+(\.\d+){0,1}) (?<z>-{0,1}\d+(\.\d+){0,1})/)
-      @vertices << point(m["x"].to_f, m["y"].to_f, m["z"].to_f)
+    if line.starts_with?("v ")
+      points = line.split(/\s/)
+      @vertices << point(points[1].to_f, points[2].to_f, points[3].to_f)
       true
     end
   end
 
   def parse_group(line)
-    if m = line.match(/^g\s+(?<name>\w+)/)
+    if line.starts_with?("g ")
+      name = line[2,line.size-2]
       g = Group.new
-      @named_groups[m["name"]] = g
+      @named_groups[name] = g
       @current_group = g
       true
     end
   end
 
   def parse_face(line)
-    if m = line.match(/^f\s+((\d+)\s*)+/)
+    if line.starts_with?("f ")
       points = line.strip.split(" ")
       triangles = fan_triangulation(points)
       triangles.each do |tri|
