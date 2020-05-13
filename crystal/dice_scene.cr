@@ -11,7 +11,6 @@ pattern.transform = rotation_y(Math::PI/4.0)
 floor.material.pattern = pattern
 floor.material.reflective = 0.7
 
-
 def pips(side)
   grp = Group.new
   tpl = sphere()
@@ -150,7 +149,7 @@ world.objects << dice
 
 mblu = mat.dup
 mblu.color = blue
-mblu.transparency = 1.0
+mblu.transparency = 0.8
 mblu.refractive_index = 1.5
 mblu.reflective = 0.5
 dice = build_dice(mblu)
@@ -159,16 +158,30 @@ dice.transform = translation( 0.0, 2.0, 0.0) *
 		 rotation_y(Math::PI/16.0)
 world.objects << dice
 
-world.light = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0))
 
-camera = camera(2500, 2500, Math::PI/3.0)
+#camera = camera(2500, 2500, Math::PI/3.0)
 #camera = camera(500, 250, Math::PI/3.0)
 #camera = camera(200, 200, Math::PI/3.0)
+camera = camera(300, 300, Math::PI/3.0)
 camera.transform = view_transform(point(0.0, 4.0, -6.0),
                                   point(0.0, 0.0, 0.0),
                                   vector(0.0, 1.0, 0.0))
-puts "Rendering..."
-canvas = camera.render(world, true)
 
-puts "Saving..."
-canvas.to_ppm_file("dice_scene.ppm")
+lpos = point(-10.0, 10.0, -10.0)
+
+world.light = point_light(lpos, color(1.0, 1.0, 1.0))
+frames = 100
+
+puts "Rendering..."
+rot = 2.0 * Math::PI / (frames * 1.0)
+frames.times do |f|
+  seq = sprintf("%03d", f)
+  p seq
+  camera.transform *= rotation_y(rot)
+  lpos = rotation_y(-rot) * lpos
+  world.light = point_light(lpos, white)
+  canvas = camera.render(world, true)
+
+  puts "Saving..."
+  canvas.to_ppm_file("seq/#{seq}.ppm")
+end
