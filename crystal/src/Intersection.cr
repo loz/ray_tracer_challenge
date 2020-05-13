@@ -1,5 +1,9 @@
 def intersection(t, object)
-  Intersection.new(t, object)
+  Intersection.new(t, object, 0.0, 0.0)
+end
+
+def intersection_with_uv(t, object, u, v)
+  Intersection.new(t, object, u, v)
 end
 
 def intersections(*ilist)
@@ -58,9 +62,9 @@ end
 
 class Intersection
   EPSILON = 0.0001
-  getter t, object
+  getter t, object, u, v
 
-  def initialize(@t : Float64, @object : Shape)
+  def initialize(@t : Float64, @object : Shape, @u : Float64 = 0.0, @v : Float64 = 0.0)
   end
 
   def <=>(other)
@@ -74,7 +78,7 @@ class Intersection
   def prepare_computations(ray, xs = Intersections.new)
     xs << self if xs.empty?
     point = ray.position(t)
-    normalv = object.normal_at(point)
+    normalv = object.normal_at(point, self)
     eyev = -ray.direction
 
     if normalv.dot(eyev) < 0
@@ -165,6 +169,8 @@ class NullIntersection < Intersection
   def initialize()
     @t = - 999_999_999_999_999.0
     @object = sphere()
+    @u = 0.0
+    @v = 0.0
   end
 
   def null?

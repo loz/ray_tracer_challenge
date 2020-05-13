@@ -12,7 +12,7 @@ class TestShape < Shape
     Intersections.new
   end
 
-  def implement_normal_at(point)
+  def implement_normal_at(point, hit)
     point
   end
 end

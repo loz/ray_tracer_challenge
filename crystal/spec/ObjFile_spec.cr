@@ -64,6 +64,22 @@ EOF
     end
   end
 
+  describe "Vertex Normals" do
+    let(file) {
+    <<-EOF
+vn  0 0 1
+vn  0.707 0 -0.707
+vn  1 2 3
+EOF
+    }
+
+    it "parses all vertex normals" do
+      expect(parser.normals[1]).to eq vector( 0.0, 0.0, 1.0)
+      expect(parser.normals[2]).to eq vector(0.707, 0.0, -0.707)
+      expect(parser.normals[3]).to eq vector( 1.0, 2.0, 3.0)
+    end
+  end
+
   describe "Polygons" do
     let(file) {
     <<-EOF
@@ -93,6 +109,38 @@ EOF
       expect(t3.p1).to eq parser.vertices[1]
       expect(t3.p2).to eq parser.vertices[4]
       expect(t3.p3).to eq parser.vertices[5]
+    end
+
+    describe "Faces with normals" do
+      let(file) {
+      <<-EOF
+v  0 1 0
+v  -1 0 0
+v  1 0 0
+
+vn -1 0 0
+vn 1 0 0
+vn 0 1 0
+
+f 1//3 2//1 3//2
+f 1/0/3 2/102/1 3/14/2
+EOF
+     }
+
+     it "creates a smooth triangle with specified normals" do
+       t1 = parser.default_group.children[0].as(SmoothTriangle)
+       t2 = parser.default_group.children[1].as(SmoothTriangle)
+
+       expect(t1.p1).to eq parser.vertices[1]
+       expect(t1.p2).to eq parser.vertices[2]
+       expect(t1.p3).to eq parser.vertices[3]
+
+       expect(t1.n1).to eq parser.normals[3]
+       expect(t1.n2).to eq parser.normals[1]
+       expect(t1.n3).to eq parser.normals[2]
+
+       expect(t2).to eq t2
+     end
     end
   end
 

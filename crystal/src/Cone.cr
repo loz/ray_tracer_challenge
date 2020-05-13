@@ -53,7 +53,7 @@ class Cone < Cylinder
     x**2 + z**2 <= radius.abs
   end
 
-  def implement_normal_at(point)
+  def implement_normal_at(point, hit)
     dist = point.x**2 + point.z**2
     if dist < 1.0 
       return vector(0.0, 1.0, 0.0) if point.y >= maximum + Float64::EPSILON

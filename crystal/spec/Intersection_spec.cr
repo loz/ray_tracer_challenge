@@ -9,6 +9,17 @@ Spectator.describe Intersection do
       expect(i.t).to eq 3.5
       expect(i.object).to eq s
     end
+
+    describe "intersection with uv" do
+      let(s) { triangle(point(0.0, 1.0, 0.0), point(-1.0, 0.0, 0.0), point(1.0, 0.0, 0.0)) }
+      let(i) { intersection_with_uv(3.5, s, 0.2, 0.4) }
+
+      it "can encapsulate 'u' and 'v'" do
+        expect(i.u).to eq 0.2
+	expect(i.v).to eq 0.4
+      end
+    end
+
   end
 
   describe "Intersections include agregates" do

@@ -23,7 +23,7 @@ class Cube < Shape
     result
   end
 
-  def implement_normal_at(point)
+  def implement_normal_at(point, hit)
     maxc = {point.x.abs, point.y.abs, point.z.abs}.max
     
     if maxc == point.x.abs

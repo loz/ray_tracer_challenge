@@ -7,7 +7,7 @@ class Plane < Shape
 
   EPSILON = 0.0001
 
-  def implement_normal_at(p)
+  def implement_normal_at(p, hit)
     vector(0.0, 1.0, 0.0)
   end
 

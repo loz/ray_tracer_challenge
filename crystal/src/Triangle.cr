@@ -2,6 +2,10 @@ def triangle(p1, p2, p3)
   Triangle.new(p1, p2, p3)
 end
 
+def smooth_triangle(p1, p2, p3, n1, n2, n3)
+  SmoothTriangle.new(p1, p2, p3, n1, n2, n3)
+end
+
 class Triangle < Shape
 
   getter p1, p2, p3
@@ -22,7 +26,7 @@ class Triangle < Shape
                point(xs.max, ys.max, zs.max)
   end
 
-  def implement_normal_at(point)
+  def implement_normal_at(point, hit)
     normal
   end
 
@@ -46,8 +50,22 @@ class Triangle < Shape
 
     t = f * e2.dot(origin_cross_e1)
 
-    result << intersection(t, self)
+    result << intersection_with_uv(t, self, u, v)
 
     result
+  end
+end
+
+class SmoothTriangle < Triangle
+  getter n1, n2, n3
+
+  def initialize(p1, p2, p3, @n1 : Point, @n2 : Point, @n3 : Point)
+    super(p1, p2, p3)
+  end
+
+  def implement_normal_at(point, hit)
+    n2 * hit.u +
+    n3 * hit.v + 
+    n1 * (1.0 - hit.u - hit.v)
   end
 end

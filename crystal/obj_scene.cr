@@ -29,7 +29,7 @@ w.light = point_light(point(-20.0, 20.0, -20.0), color(1.0, 1.0, 1.0))
 
 #camera = camera(2500, 1250, Math::PI/3.0) #1.5 hrs +
 camera = camera(500, 500, Math::PI/3.0)
-#camera = camera(200, 100, Math::PI/3.0)
+#camera = camera(100, 100, Math::PI/3.0)
 #camera = camera(50, 50, Math::PI/3.0)
 #camera = camera(25, 25, Math::PI/3.0)
 camera.transform = view_transform(point(0.0, 1.0, -32.0),

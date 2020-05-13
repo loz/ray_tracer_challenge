@@ -91,4 +91,56 @@ Spectator.describe Triangle do
       end
     end
   end
+
+  describe SmoothTriangle do
+    let(p1) { point( 0.0, 1.0, 0.0) }
+    let(p2) { point(-1.0, 0.0, 0.0) }
+    let(p3) { point( 1.0, 0.0, 0.0) }
+    let(n1) { vector( 0.0, 1.0, 0.0) }
+    let(n2) { vector(-1.0, 0.0, 0.0) }
+    let(n3) { vector( 1.0, 0.0, 0.0) }
+
+    let(tri) { smooth_triangle(p1, p2, p3, n1, n2, n3) }
+
+    it "has additional properties for normals" do
+      expect(tri.p1).to eq p1
+      expect(tri.p2).to eq p2
+      expect(tri.p3).to eq p3
+      expect(tri.n1).to eq n1
+      expect(tri.n2).to eq n2
+      expect(tri.n3).to eq n3
+    end
+
+    describe "Intersections" do
+      let(r) { ray(point(-0.2, 0.3,-2.0), vector(0.0, 0.0, 1.0)) }
+      let(xs) { tri.intersect(r) }
+
+      it "stores the u/v values" do
+        expect(xs[0].u).to be_close 0.45, Float64::EPSILON
+	expect(xs[0].v).to be_close 0.25, Float64::EPSILON
+      end
+
+      describe "Interpolation of Normals" do
+        let(i) { intersection_with_uv(1.0, tri, 0.45, 0.25) }
+	let(n) { tri.normal_at(point(0.0, 0.0, 0.0), i) }
+
+	it "uses uv value to interpolate normal" do
+	  expect(n).to be_approximate vector(-0.5547, 0.83205, 0.0)
+	end
+      end
+
+      describe "Preparing normals for smooth triangles" do
+        let(i) { intersection_with_uv(1.0, tri, 0.45, 0.25) }
+	let(r) { ray(point(-0.2, 0.3,-2.0), vector(0.0, 0.0, 1.0)) }
+
+	let(comps) { i.prepare_computations(r) }
+
+	it "includes hit for normal calculations" do
+	  expect(comps.normalv).to be_approximate vector(-0.5547, 0.83205, 0.0)
+	end
+      end
+    end
+
+
+  end
 end

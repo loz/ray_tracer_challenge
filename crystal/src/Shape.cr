@@ -57,13 +57,13 @@ class Shape
     false
   end
 
-  def normal_at(p)
+  def normal_at(p, i : Intersection = NullIntersection.new)
     local_point = world_to_object_space(p)
-    local_normal = implement_normal_at(local_point)
+    local_normal = implement_normal_at(local_point, i)
     normal_to_world(local_normal)
   end
 
-  def implement_normal_at(point)
+  def implement_normal_at(point, hit : Intersection)
     raise "NotImplemented"
   end
 end

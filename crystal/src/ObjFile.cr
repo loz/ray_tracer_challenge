@@ -3,6 +3,7 @@ class ObjFile
   getter ignored
   getter default_group 
   getter vertices = [] of Point
+  getter normals = [] of Vector
 
   def self.parse_file(fname)
     str = File.read(fname)
@@ -33,6 +34,7 @@ class ObjFile
   def initialize
     @ignored = 0
     @vertices << point(0.0, 0.0, 0.0) #Sentinal, as 1-Index
+    @normals << vector(0.0, 0.0, 0.0) #1-Indexed
     @default_group = Group.new
     @current_group = @default_group
     @named_groups = {} of String => Group
@@ -40,6 +42,7 @@ class ObjFile
 
   def parse_line(line)
     parse_vertex(line) ||
+    parse_normal(line) ||
     parse_face(line) ||
     parse_group(line) ||
     ignore line
@@ -51,8 +54,16 @@ class ObjFile
 
   def parse_vertex(line)
     if line.starts_with?("v ")
-      points = line.split(/\s/)
+      points = line.split(/\s+/)
       @vertices << point(points[1].to_f, points[2].to_f, points[3].to_f)
+      true
+    end
+  end
+
+  def parse_normal(line)
+    if line.starts_with?("vn ")
+      points = line.split(/\s+/)
+      @normals << vector(points[1].to_f, points[2].to_f, points[3].to_f)
       true
     end
   end
@@ -80,14 +91,33 @@ class ObjFile
 
   def fan_triangulation(points)
     triangles = [] of Triangle
+    ps1 = points[1].split("/")
+    smooth = ps1.size > 1
     (points.size-3).times do |n|
       index = n + 2
-      p1 = points[1].split("/")[0].to_i
-      p2 = points[index].split("/")[0].to_i
-      p3 = points[index+1].split("/")[0].to_i
-      tri = triangle @vertices[p1],
+      if smooth
+        ps2 = points[index].split("/")
+	ps3 = points[index+1].split("/")
+        p1 = ps1[0].to_i
+        p2 = ps2[0].to_i
+        p3 = ps3[0].to_i
+	n1 = ps1[2].to_i
+	n2 = ps2[2].to_i
+	n3 = ps3[2].to_i
+        tri = smooth_triangle @vertices[p1],
+	                      @vertices[p2],
+			      @vertices[p3],
+			      @normals[n1],
+			      @normals[n2],
+			      @normals[n3]
+      else
+        p1 = points[1].to_i
+        p2 = points[index].to_i
+        p3 = points[index+1].to_i
+        tri = triangle @vertices[p1],
                      @vertices[p2],
                      @vertices[p3]
+      end
       triangles << tri
     end
     triangles

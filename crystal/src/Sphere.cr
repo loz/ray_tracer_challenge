@@ -35,7 +35,7 @@ class Sphere < Shape
 	)
   end
 
-  def implement_normal_at(object_point)
+  def implement_normal_at(object_point, hit)
     object_point - point(0.0, 0.0, 0.0)
   end
 
