@@ -48,6 +48,7 @@ class CSG < Group
   end
 
   def implement_intersect(ray)
+    return Intersections.new unless intersect_bbox?(ray)
     xs = left.intersect(ray)
     rightxs = right.intersect(ray)
 
