@@ -25,6 +25,10 @@ class Shape
                point( 1.0, 1.0, 1.0)
   end
 
+  def include?(other)
+    self.object_id == other.object_id #Non groups is exact match to self
+  end
+
   def intersect(ray)
     tray = ray.transform(transform.inverse)
     implement_intersect(tray)

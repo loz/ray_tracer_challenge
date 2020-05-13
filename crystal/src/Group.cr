@@ -21,6 +21,12 @@ class Group < Shape
     other.object_id == object_id
   end
 
+  def include?(child)
+    @children.any? do |c|
+      c.include?(child)
+    end
+  end
+
   def <<(child)
     child.parent = self
     @children << child
