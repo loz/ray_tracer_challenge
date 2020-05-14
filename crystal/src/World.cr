@@ -38,7 +38,7 @@ class World
     distance = v.magnitude
     direction = v.normalize
 
-    r = ray(point, direction)
+    r = Rays.new(point, direction)
     intersections = intersect(r)
 
     h = intersections.hit
@@ -83,7 +83,7 @@ class World
   def reflected_color(comps, recursion = 5)
     return black if recursion < 1
     return black if comps.object.material.reflective == 0.0
-    reflect_ray = ray(comps.over_point, comps.reflectv)
+    reflect_ray = Rays.new(comps.over_point, comps.reflectv)
     rcolor = color_at(reflect_ray, recursion - 1)
     rcolor = rcolor * comps.object.material.reflective
     color(rcolor)
@@ -101,7 +101,7 @@ class World
     direction = comps.normalv * (n_ratio * cos_i - cos_t) -
                 comps.eyev * n_ratio
 
-    refract_ray = ray(comps.under_point, direction)
+    refract_ray = Rays.new(comps.under_point, direction)
 
     rcolor = color_at(refract_ray, recursion - 1) *
              comps.object.material.transparency
