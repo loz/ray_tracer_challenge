@@ -137,8 +137,8 @@ world.objects << floor
 world.objects << setup
 
 #camera = camera(2500, 2500, Math::PI/3.0)
-camera = camera(500, 500, Math::PI/3.0)
-#camera = camera(200, 200, Math::PI/3.0)
+#camera = camera(500, 500, Math::PI/3.0)
+camera = camera(200, 200, Math::PI/3.0)
 #camera = camera(300, 300, Math::PI/3.0)
 #camera = camera(600, 600, Math::PI/3.0)
 #camera = camera(200, 200, Math::PI/3.0)
@@ -170,11 +170,9 @@ def single(camera, world, name)
 end
 
 puts "Rendering..."
-#frames = 30
-#rot = Math::PI * 2.0 / (frames * 1.0)
-#animated(camera, world, frames) do |f|
-#  hb.transform = 
-#		 rotation_y(-rot * f)
-#                 #rotation_z(rot * f) 
-#end
-single(camera, world, "glass")
+frames = 30
+rot = Math::PI * 2.0 / (frames * 1.0)
+animated(camera, world, frames) do |f|
+  camera.transform *= rotation_y(rot)
+end
+#single(camera, world, "glass")
