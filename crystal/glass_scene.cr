@@ -90,6 +90,7 @@ def glass()
   glass.specular = 0.1
   glass.refractive_index = 1.5
   glass.reflective = 1.0
+  glass.shadows = false
 
   air = material()
   air.color = black()
@@ -99,6 +100,7 @@ def glass()
   air.specular = 1.0
   air.reflective = 1.0
   air.refractive_index = 1.0
+  air.shadows = false
 
   base = cylinder()
   base.minimum = 2.0

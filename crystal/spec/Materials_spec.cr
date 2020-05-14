@@ -87,7 +87,7 @@ Spectator.describe Materials do
       it "has a resulting color" do
         result = m.lighting(object, light, position, eyev, normalv, in_shadow)
 
-	expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
+        expect(result.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
     end
     

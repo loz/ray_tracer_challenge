@@ -1,3 +1,4 @@
+require "./spec_helper"
 
 Spectator.describe World do
   describe "Creating A World" do
@@ -74,16 +75,16 @@ Spectator.describe World do
 
       it "counts as shaded" do
         w.light = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0))
-	s1 = sphere()
-	w.objects << s1
-	s2 = sphere()
-	s2.transform = translation(0.0, 0.0, 10.0)
-	w.objects << s2
-	i = intersection(4.0, s2)
+	      s1 = sphere()
+	      w.objects << s1
+	      s2 = sphere()
+	      s2.transform = translation(0.0, 0.0, 10.0)
+	      w.objects << s2
+	      i = intersection(4.0, s2)
 
-	comps = i.prepare_computations(r)
-	c = w.shade_hit(comps)
-	expect(c.approximate?(color(0.1, 0.1, 0.1))).to be true
+	      comps = i.prepare_computations(r)
+	      c = w.shade_hit(comps)
+	      expect(c.approximate?(color(0.1, 0.1, 0.1))).to be true
       end
     end
 
@@ -97,7 +98,7 @@ Spectator.describe World do
 
       it "is black" do
         c = w.color_at(r)
-	expect(c).to eq black
+	      expect(c).to eq black
       end
     end
 
@@ -117,10 +118,10 @@ Spectator.describe World do
 
       it "is material color" do
         outer.material.ambient = 1.0
-	inner.material.ambient = 1.0
+	      inner.material.ambient = 1.0
 
-	c = w.color_at(r)
-	expect(c).to eq inner.material.color
+	      c = w.color_at(r)
+	      expect(c).to eq inner.material.color
       end
     end
   end
@@ -141,6 +142,20 @@ Spectator.describe World do
 
       it "is in shadow" do
         expect(w.is_shadowed?(p)).to be true
+      end
+    end
+
+    describe "when the object has material set to no-shadow" do
+      let(p) { point(10.0, -10.0, 10.0) }
+      before_each do
+        o1 = w.objects[0]
+        o2 = w.objects[1]
+        o1.material.shadows = false
+        o2.material.shadows = false
+      end
+
+      it "is in shadow" do
+        expect(w.is_shadowed?(p)).to be false
       end
     end
 

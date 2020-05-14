@@ -41,6 +41,8 @@ class World
     r = Rays.new(point, direction)
     intersections = intersect(r)
 
+    intersections = intersections.reject {|i| !i.object.material.shadows }
+
     h = intersections.hit
     if !h.null? && h.t < distance
       return true

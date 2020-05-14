@@ -14,58 +14,6 @@ def intersections(*ilist)
   set
 end
 
-
-struct Intersections
-  EPSILON = 0.0001
-  getter set
-
-  def initialize()
-    @set = [] of Intersection
-  end
-
-  def hit
-    hits = @set.select {|i| i.t >= 0.0 }
-    if hits.empty?
-      NullIntersection.new
-    else
-      hits.min_by {|i| i.t } 
-    end
-  end
-
-  def empty?
-    @set.empty?
-  end
-
-  def size
-    @set.size
-  end
-
-  def <<(i)
-    @set << i
-  end
-  
-  def each
-    @set.each do |i|
-      yield i
-    end
-  end
-
-  def [](idx)
-    @set[idx]
-  end
-
-  def append(other)
-    if @set.size == 0
-      @set = other.set
-      return
-    elsif other.set.size == 0
-      return #nothing to merge
-    end
-    @set.concat(other.set)
-    @set.sort!
-  end
-end
-
 class Intersection
   EPSILON = 0.0001
   getter t, object, u, v
@@ -110,6 +58,69 @@ class Intersection
 
     comps.calculate_n1_n2(xs, self)
     comps
+  end
+end
+
+struct Intersections
+  include Enumerable(Intersection)
+
+  EPSILON = 0.0001
+  getter set
+
+  def initialize()
+    @set = [] of Intersection
+  end
+
+  def hit
+    hits = @set.select {|i| i.t >= 0.0 }
+    if hits.empty?
+      NullIntersection.new
+    else
+      hits.min_by {|i| i.t } 
+    end
+  end
+
+  def empty?
+    @set.empty?
+  end
+
+  def size
+    @set.size
+  end
+
+  def <<(i)
+    @set << i
+  end
+  
+  def each
+    @set.each do |i|
+      yield i
+    end
+  end
+
+  def reject
+    result = Intersections.new
+    each do |i|
+      if !yield i
+        result << i
+      end
+    end
+    result
+  end
+
+  def [](idx)
+    @set[idx]
+  end
+
+  def append(other)
+    if @set.size == 0
+      @set = other.set
+      return
+    elsif other.set.size == 0
+      return #nothing to merge
+    end
+    @set.concat(other.set)
+    @set.sort!
   end
 end
 
