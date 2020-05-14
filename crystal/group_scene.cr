@@ -58,16 +58,16 @@ w.objects << floor
   end
 end
 
-w.light = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0))
+w.light = point_light(point(0.0, 20.0, -20.0), color(1.0, 1.0, 1.0))
 
-#camera = camera(2500, 1250, Math::PI/3.0) #1.5 hrs +
-camera = camera(500, 250, Math::PI/3.0)
+camera = camera(2500, 1250, Math::PI/3.0) #1.5 hrs +
+#camera = camera(500, 250, Math::PI/3.0)
 #camera = camera(100, 50, Math::PI/3.0)
 camera.transform = view_transform(point(5.0, 5.0, -20.0),
                                   point(0.0, 0.0, 0.0),
                                   vector(0.0, 1.0, 0.0))
 puts "Rendering..."
-canvas = camera.render(w)
+canvas = camera.render(w, true)
 
 puts "Saving..."
 canvas.to_ppm_file("group_scene.ppm")
