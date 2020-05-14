@@ -15,25 +15,24 @@ end
 module Matrix
   class Base
     getter size : Int32
-    getter content : Array(Array(Float64))
+    getter content : Array(Float64)
 
     @inverse : Nil | Matrix::Base
+    @transposed : Nil | Matrix::Base
 
     def initialize(@size : Int32)
-      @content = Array.new(@size) { Array.new(@size, 0.0) }
+      @content = Array.new(@size*@size, 0.0)
     end
 
     def initialize(tuple)
       size = tuple.size
-      @content = Array(Array(Float64)).new
-      size.times do |y|
-        row = Array(Float64).new
-        size.times do |x|
-          row << tuple[x][y]
-        end
-        @content << row
-      end
       @size = size
+      @content = Array.new(@size*@size, 0.0)
+      size.times do |y|
+        size.times do |x|
+          @content[(y*@size)+x] = tuple[x][y]
+        end
+      end
     end
 
     def invertible?
@@ -42,6 +41,10 @@ module Matrix
 
     def inverse=(other : Matrix::Base)
       @inverse = other
+    end
+
+    def transposed=(other : Matrix::Base)
+      @transposed = other
     end
 
     def inverse
@@ -104,15 +107,16 @@ module Matrix
     end
 
     def transpose
-      m = Array(Array(Float64)).new
+      return @transposed.as(Matrix::Base) if @transposed
+      m = Matrix::Base.new(size)
       size.times do |y|
-        row = Array(Float64).new
         size.times do |x|
-          row << self[x,y]
+          m[y,x] = self[x, y]
         end
-        m << row
       end
-      matrix(m)
+      m.transposed = self
+      @transposed = m
+      m
     end
 
     def dump
@@ -129,10 +133,10 @@ module Matrix
     end
 
     def [](x, y)
-      @content[y][x]
+      @content[(y*size)+x]
     end
     def []=(x, y, v)
-      @content[y][x] = v
+      @content[(y*size)+x] = v
     end
 
     def ==(other)
