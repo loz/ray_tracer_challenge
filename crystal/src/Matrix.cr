@@ -164,12 +164,21 @@ module Matrix
     end
 
     def *(other : RTuple)
+      x, y, z, w = other.x, other.y, other.z, other.w
+      # This is always size 4, so can be further deconstructed, as
+      # all index (size * y) + x are fixed
+      #RTuple.new(
+      #  self[0,0] * x + self[0,1] * y + self[0,2] * z + self[0,3] * w,
+      #  self[1,0] * x + self[1,1] * y + self[1,2] * z + self[1,3] * w,
+      #  self[2,0] * x + self[2,1] * y + self[2,2] * z + self[2,3] * w,
+      #  self[3,0] * x + self[3,1] * y + self[3,2] * z + self[3,3] * w 
+      #  )
       RTuple.new(
-        self[0,0] * other.x + self[0,1] * other.y + self[0,2] * other.z + self[0,3] * other.w,
-        self[1,0] * other.x + self[1,1] * other.y + self[1,2] * other.z + self[1,3] * other.w,
-        self[2,0] * other.x + self[2,1] * other.y + self[2,2] * other.z + self[2,3] * other.w,
-        self[3,0] * other.x + self[3,1] * other.y + self[3,2] * other.z + self[3,3] * other.w 
-        )
+        @content[0] * x + @content[4] * y + @content[ 8] * z + content[12] * w,
+        @content[1] * x + @content[5] * y + @content[ 9] * z + content[13] * w,
+        @content[2] * x + @content[6] * y + @content[10] * z + content[14] * w,
+        @content[3] * x + @content[7] * y + @content[11] * z + content[15] * w
+      )
     end
 
     def +(other)

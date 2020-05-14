@@ -86,7 +86,8 @@ class World
     reflect_ray = Rays.new(comps.over_point, comps.reflectv)
     rcolor = color_at(reflect_ray, recursion - 1)
     rcolor = rcolor * comps.object.material.reflective
-    color(rcolor)
+    rcolor.fix_point_w!
+    rcolor
   end
 
   def refracted_color(comps, recursion = 5)
@@ -105,6 +106,7 @@ class World
 
     rcolor = color_at(refract_ray, recursion - 1) *
              comps.object.material.transparency
-    color(rcolor)
+    rcolor.fix_point_w!
+    rcolor
   end
 end
