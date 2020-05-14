@@ -80,6 +80,35 @@ def pencil()
   body
 end
 
+def liquid()
+  water = material()
+  water.color = black()
+  water.transparency = 1.0
+  water.diffuse = 1.0
+  water.specular = 1.0
+  water.reflective = 1.0
+  water.refractive_index = 1.3
+  water.shadows = false
+
+  inner = cylinder()
+  inner.minimum = 2.0
+  inner.maximum = 3.25
+  inner.closed = true
+  inner.material = water
+  inner.transform =  translation(0.0, -5.0, 0.0) *
+                    scaling(0.6, 2.0, 0.6) *
+                    scaling(0.9, 0.9, 0.9) *
+                    translation(0.0, 0.7, 0.0)
+                    #scaling(0.9999, 0.9999, 0.9999)
+
+  cut = cube()
+  cut.material = water
+  cut.transform = translation(0.0, 2.3, 0.0)
+
+  g = CSG.new(:difference, inner, cut)
+  g
+end
+
 def glass()
 
   glass = material()
@@ -125,11 +154,15 @@ end
 
 setup = group()
 tumbler = glass()
-tumbler.transform = scaling(2.0, 2.0, 2.0)
+water = liquid()
+g = CSG.new(:difference, tumbler, water)
+g = CSG.new(:union, g, water)
+g.transform = scaling(2.0, 2.0, 2.0)
+
 hb = pencil
 hb.transform = translation(0.3, 3.5, 0.0) *
                rotation_z((Math::PI / 2.0) * 0.8)
-setup << tumbler
+setup << g
 setup << hb
 
 world = world()
