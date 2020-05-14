@@ -19,6 +19,7 @@ module Matrix
 
     @inverse : Nil | Matrix::Base
     @transposed : Nil | Matrix::Base
+    @determinant : Nil | Float64
 
     def initialize(@size : Int32)
       @content = Array.new(@size*@size, 0.0)
@@ -62,6 +63,7 @@ module Matrix
     end
 
     def determinant
+      return @determinant.as(Float64) if @determinant
       if size == 2
         return (self[0,0] * self[1,1]) - 
                (self[1,0] * self[0,1])
@@ -70,6 +72,7 @@ module Matrix
       size.times do |x|
         total += (self[0,x] * cofactor(0,x))
       end
+      @determinant = total
       total
     end
 
