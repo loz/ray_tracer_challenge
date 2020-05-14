@@ -55,7 +55,13 @@ struct Intersections
   end
 
   def append(other)
-    @set += other.set
+    if @set.size == 0
+      @set = other.set
+      return
+    elsif other.set.size == 0
+      return #nothing to merge
+    end
+    @set.concat(other.set)
     @set.sort!
   end
 end
