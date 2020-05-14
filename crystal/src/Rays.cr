@@ -13,6 +13,6 @@ struct Rays
   end
 
   def transform(m)
-    ray(m * origin, m * direction)
+    Rays.new(m * origin, m * direction)
   end
 end
