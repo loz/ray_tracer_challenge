@@ -1,4 +1,7 @@
 require "./src/RayTracer"
+require "./model/pencil"
+require "./model/glass"
+require "./src/animate"
 
 floor = plane()
 floor.transform = translation(0.0, -1.0, 0.0)
@@ -8,169 +11,6 @@ floor.material.diffuse = 0.5
 pattern = stripe_pattern(color(0.80, 0.80, 0.80), color(0.5, 0.5, 0.5))
 pattern.transform = rotation_y(Math::PI/4.0)
 floor.material.pattern = pattern
-
-def pencil()
-  tpl = cube()
-  tpl.material.color = color(1.0, 1.0, 0.0)
-  tpl.transform = scaling(1.0, 1.0, 2.0)
-
-  body = tpl.dup
-  cut = tpl.dup
-  cut.transform = rotation_x(Math::PI/1.5) *
-                  scaling(1.0, 1.0, 2.0)
-  body = CSG.new(:intersection, body, cut)
-
-  cut = tpl.dup
-  cut.transform = rotation_x(-Math::PI/1.5) *
-                  scaling(1.0, 1.0, 2.0)
-  body = CSG.new(:intersection, body, cut)
-  body.transform = scaling(1.0, 0.04, 0.04) *
-                   scaling(4.0, 4.0, 4.0)
-
-  wood = material()
-  pattern = ring_pattern(color(0.8, 0.6, 0.2), color(0.55, 0.4, 0.15))
-  pattern.transform = scaling(0.03, 0.03, 1.0) *
-                      rotation_x(Math::PI/10.0) *
-		      rotation_z(Math::PI/13.5)
-  wood.specular = 0.0
-  wood.pattern = pattern
-
-  cut = cone()
-  cut.maximum = 40.0
-  cut.minimum = 0.0
-  cut.transform = translation(-4.0, 0.0, 0.0) *
-                  rotation_z(-Math::PI/2.0) *
-                  scaling(0.3, 1.0, 0.3)
-  cut.material = wood
-  body = CSG.new(:intersection, body, cut)
-
-  cut = cube
-  cut.material = wood
-  cut.transform = translation(4.99, 0.0, 0.0)
-  body = CSG.new(:difference, body, cut)
-
-  cut = cube
-  cut.material = wood
-  cut.transform = translation(-4.8, 0.0, 0.0)
-  body = CSG.new(:difference, body, cut)
-
-  graphite = material()
-  graphite.color = color(0.3, 0.3, 0.3)
-  graphite.specular = 0.3
-  graphite.diffuse = 0.9
-
-  lead = cylinder()
-  lead.material = graphite
-  lead.maximum = 1.0
-  lead.minimum = -1.0
-  lead.closed = true
-  lead.transform = rotation_z(Math::PI/2.0) *
-                   scaling(0.015, 1.0, 0.015) *
-                   scaling(4.0, 4.0, 4.0)
-  cut = cone()
-  cut.maximum = 40.0
-  cut.minimum = 0.0
-  cut.transform = translation(-4.0, 0.0, 0.0) *
-                  rotation_z(-Math::PI/2.0) *
-                  scaling(0.3, 1.0, 0.3)
-  cut.material = graphite
-  lead = CSG.new(:intersection, lead, cut)
-
-  body = CSG.new(:union, body, lead)
-  body
-end
-
-def water_material
-  water = material()
-  water.color = black()
-  water.transparency = 1.0
-  water.diffuse = 1.0
-  water.specular = 1.0
-  water.reflective = 1.0
-  water.refractive_index = 1.3
-  water.shadows = false
-  water
-end
-
-def liquid()
-  inner = cylinder()
-  inner.minimum = 2.0
-  inner.maximum = 3.25
-  inner.closed = true
-  inner.material = water_material
-  inner.transform =  translation(0.0, -5.0, 0.0) *
-                    scaling(0.6, 2.0, 0.6) *
-                    scaling(0.9, 0.9, 0.9) *
-                    translation(0.0, 0.7, 0.0)
-                    #scaling(0.9999, 0.9999, 0.9999)
-  return inner
-
-  cut = cube()
-  cut.material = water_material
-  cut.transform = translation(0.0, 2.3, 0.0)
-
-  g = CSG.new(:difference, inner, cut)
-  g
-end
-
-def glass()
-
-  glass = material()
-  glass.color = black()
-  glass.transparency = 1.0
-  glass.shininess = 300.0
-  glass.diffuse = 0.1
-  glass.specular = 0.1
-  glass.refractive_index = 1.5
-  glass.reflective = 1.0
-  glass.shadows = false
-
-  air = material()
-  air.color = black()
-  air.transparency = 1.0
-  air.shininess = 300.0
-  air.diffuse = 1.0
-  air.specular = 1.0
-  air.reflective = 1.0
-  air.refractive_index = 1.0
-  air.shadows = false
-
-  base = cylinder()
-  base.minimum = 2.0
-  base.maximum = 3.25
-  base.closed = true
-  base.material = glass
-  base.transform =  translation(0.0, -5.0, 0.0) *
-                    scaling(0.6, 2.0, 0.6)
-
-  inner = cylinder()
-  inner.minimum = 2.0
-  inner.maximum = 3.25
-  inner.closed = true
-  inner.material = air
-  inner.transform =  translation(0.0, -5.0, 0.0) *
-                    scaling(0.6, 2.0, 0.6) *
-                    scaling(0.9, 0.9, 0.9) *
-                    translation(0.0, 0.7, 0.0)
-
-  water = liquid()
-
-  cut = cube()
-  cut.material = air
-  cut.transform = translation(0.0, 2.3, 0.0)
-  a = liquid()
-  a.material = air
-  a = CSG.new(:intersection, a, cut)
-
-  cut = cube()
-  cut.material = water_material
-  cut.transform = translation(0.0, 2.3, 0.0)
-  l = CSG.new(:difference, water, cut)
-
-  obj = CSG.new(:difference, base, a)
-  obj = CSG.new(:difference, obj, l)
-  obj
-end
 
 setup = group()
 tumbler = glass()
@@ -205,29 +45,14 @@ lpos = point(-10.0, 10.0, -10.0)
 
 world.light = point_light(lpos, color(1.0, 1.0, 1.0))
 
+anim = false
 
-def animated(camera, world, frames = 100)
-  frames.times do |f|
-    seq = sprintf("%03d", f)
-    p seq
-    yield f
-    canvas = camera.render(world, true)
-    puts "Saving..."
-    canvas.to_ppm_file("seq/#{seq}.ppm")
+if anim
+  frames = 30
+  rot = Math::PI * 2.0 / (frames * 1.0)
+  animated(camera, world, frames) do |f|
+    camera.transform *= rotation_y(rot)
   end
+else
+  single(camera, world, "glass")
 end
-
-def single(camera, world, name)
-  canvas = camera.render(world, true)
-  puts "Saving"
-  canvas.to_ppm_file("#{name}.ppm")
-  `open #{name}.ppm`
-end
-
-puts "Rendering..."
-frames = 30
-rot = Math::PI * 2.0 / (frames * 1.0)
-animated(camera, world, frames) do |f|
-  camera.transform *= rotation_y(rot)
-end
-#single(camera, world, "glass")
