@@ -1,6 +1,7 @@
-def animated(camera, world, frames = 100)
+def animated(camera, world, frames = 100, from=0)
   puts "Rendering..."
   frames.times do |f|
+    next if f < from
     seq = sprintf("%03d", f)
     p seq
     yield f
