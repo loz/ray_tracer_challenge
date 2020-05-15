@@ -1,6 +1,9 @@
-def pencil()
+def pencil(paint = color(1.0, 1.0, 1.0), colored = false)
+  mat = material()
+  mat.color = paint
+
   tpl = cube()
-  tpl.material.color = color(1.0, 1.0, 0.0)
+  tpl.material = mat
   tpl.transform = scaling(1.0, 1.0, 2.0)
 
   body = tpl.dup
@@ -24,6 +27,16 @@ def pencil()
   wood.specular = 0.0
   wood.pattern = pattern
 
+  core = cylinder()
+  core.maximum = 1.0
+  core.minimum = -1.0
+  core.closed = true
+  core.material = mat
+  core.transform = 
+                   scaling(1.0, 0.043, 0.043) *
+                   scaling(4.0, 4.0, 4.0) *
+                   rotation_z(Math::PI/2.0)
+
   cut = cone()
   cut.maximum = 40.0
   cut.minimum = 0.0
@@ -31,7 +44,9 @@ def pencil()
                   rotation_z(-Math::PI/2.0) *
                   scaling(0.3, 1.0, 0.3)
   cut.material = wood
-  body = CSG.new(:intersection, body, cut)
+  core = CSG.new(:intersection, core, cut)
+
+  body = CSG.new(:intersection, body, core)
 
   cut = cube
   cut.material = wood
@@ -44,7 +59,12 @@ def pencil()
   body = CSG.new(:difference, body, cut)
 
   graphite = material()
-  graphite.color = color(0.3, 0.3, 0.3)
+  if colored
+    graphite.color = (color(0.3, 0.3, 0.3) * 0.3) +
+                     (mat.color * 0.7)
+  else
+    graphite.color = color(0.3, 0.3, 0.3)
+  end
   graphite.specular = 0.3
   graphite.diffuse = 0.9
 
