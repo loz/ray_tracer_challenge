@@ -80,7 +80,7 @@ def pencil()
   body
 end
 
-def liquid()
+def water_material
   water = material()
   water.color = black()
   water.transparency = 1.0
@@ -89,20 +89,24 @@ def liquid()
   water.reflective = 1.0
   water.refractive_index = 1.3
   water.shadows = false
+  water
+end
 
+def liquid()
   inner = cylinder()
   inner.minimum = 2.0
   inner.maximum = 3.25
   inner.closed = true
-  inner.material = water
+  inner.material = water_material
   inner.transform =  translation(0.0, -5.0, 0.0) *
                     scaling(0.6, 2.0, 0.6) *
                     scaling(0.9, 0.9, 0.9) *
                     translation(0.0, 0.7, 0.0)
                     #scaling(0.9999, 0.9999, 0.9999)
+  return inner
 
   cut = cube()
-  cut.material = water
+  cut.material = water_material
   cut.transform = translation(0.0, 2.3, 0.0)
 
   g = CSG.new(:difference, inner, cut)
@@ -148,15 +152,33 @@ def glass()
                     scaling(0.6, 2.0, 0.6) *
                     scaling(0.9, 0.9, 0.9) *
                     translation(0.0, 0.7, 0.0)
-  obj = CSG.new(:difference, base, inner)
+
+  water = liquid()
+
+  cut = cube()
+  cut.material = air
+  cut.transform = translation(0.0, 2.3, 0.0)
+  a = liquid()
+  a.material = air
+  a = CSG.new(:intersection, a, cut)
+
+  cut = cube()
+  cut.material = water_material
+  cut.transform = translation(0.0, 2.3, 0.0)
+  l = CSG.new(:difference, water, cut)
+
+  obj = CSG.new(:difference, base, a)
+  obj = CSG.new(:difference, obj, l)
   obj
 end
 
 setup = group()
 tumbler = glass()
 water = liquid()
-g = CSG.new(:difference, tumbler, water)
-g = CSG.new(:union, g, water)
+g = Group.new
+g << tumbler
+#g = CSG.new(:difference, tumbler, water)
+#g = CSG.new(:union, g, water)
 g.transform = scaling(2.0, 2.0, 2.0)
 
 hb = pencil
@@ -170,8 +192,8 @@ world.objects << floor
 world.objects << setup
 
 #camera = camera(2500, 2500, Math::PI/3.0)
-#camera = camera(500, 500, Math::PI/3.0)
-camera = camera(200, 200, Math::PI/3.0)
+camera = camera(500, 500, Math::PI/3.0)
+#camera = camera(200, 200, Math::PI/3.0)
 #camera = camera(300, 300, Math::PI/3.0)
 #camera = camera(600, 600, Math::PI/3.0)
 #camera = camera(200, 200, Math::PI/3.0)
