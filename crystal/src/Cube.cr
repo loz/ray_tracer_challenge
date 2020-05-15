@@ -4,9 +4,6 @@ end
 
 class Cube < Shape
 
-  EPSILON = 0.00001
-  INFINITY = Float32::INFINITY
-
   def implement_intersect(ray)
     result = Intersections.new
     xtmin, xtmax = check_axis(ray.origin.x, ray.direction.x)
@@ -39,12 +36,12 @@ class Cube < Shape
     tmin_numerator = (-1.0 - origin)
     tmax_numerator = ( 1.0 - origin)
 
-    if direction.abs >= EPSILON
+    if direction.abs >= Float64::EPSILON
       tmin = tmin_numerator / direction
       tmax = tmax_numerator / direction
     else
-      tmin = tmin_numerator * INFINITY
-      tmax = tmax_numerator * INFINITY
+      tmin = tmin_numerator * Float64::INFINITY
+      tmax = tmax_numerator * Float64::INFINITY
     end
 
     if tmin > tmax
